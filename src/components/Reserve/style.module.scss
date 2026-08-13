@@ -1,0 +1,138 @@
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.reserve {
+  height: 80vh;
+  width: 100vw;
+  background: #f7eee9;
+  @include flex-center(row, center, center);
+  padding: 6rem 2.5rem;
+  box-sizing: border-box;
+  font-family: serif;
+  overflow: hidden;
+
+  .container {
+    display: grid;
+    grid-template-columns: 1.25fr 0.85fr;
+    gap: 4rem;
+    max-width: 1350px;
+    width: 100%;
+    align-items: center;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .imageContainer {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      position: relative;
+      overflow: hidden;
+
+      div {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        will-change: clip-path;
+
+        img {
+          object-fit: cover;
+          will-change: transform;
+        }
+      }
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding-left: 1rem;
+      will-change: transform;
+
+      @media (max-width: 1024px) {
+        padding-left: 0;
+      }
+    }
+
+    .subhead {
+      font-family: sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #7a6b5d;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+    }
+
+    .title {
+      font-size: clamp(2rem, 3.2vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: #3b322c;
+      margin-bottom: 1.5rem;
+    }
+
+    .description {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: #5c5046;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+    }
+
+    .btnWrapper {
+      overflow: hidden; 
+      display: inline-block;
+
+      .button {
+        @include flex-center();
+        min-height: 52px;
+        padding: 0.8rem 2.2rem;
+        min-width: 180px;
+        width: 100%;
+
+        background: transparent;
+        border: none;
+        color: #8c6d58;
+        font-family: sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 12px;
+          left: 2.2rem;
+          right: 2.2rem;
+          height: 1px;
+          background-color: #8c6d58;
+          transition: transform 0.3s ease, background-color 0.3s ease;
+          transform-origin: right;
+        }
+
+        &:hover {
+          background-color: #b04e21;
+          color: #ffffff;
+
+          &::after {
+            background-color: #ffffff;
+            transform: scaleX(0);
+            transform-origin: left;
+          }
+        }
+      }
+    }
+  }
+}
+

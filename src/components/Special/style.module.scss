@@ -1,0 +1,129 @@
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.offer {
+  @include flex-center(column);
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #f7f7f7;
+  padding: 6rem 2rem;
+  box-sizing: border-box;
+  font-family: serif;
+}
+
+.headerContainer {
+  @include flex-center(column);
+  text-align: center;
+  margin-bottom: 3.5rem;
+
+  .header {
+    font-size: 1.5rem;
+    letter-spacing: 0.25em;
+    color: #4a3f35;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .subtext {
+    font-size: 0.95rem;
+    color: #6e645a;
+    font-style: italic;
+
+    span {
+      font-weight: 600;
+    }
+  }
+}
+
+.cardsContainer {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: stretch;
+  max-width: 1050px;
+  width: 100%;
+  margin-bottom: 3.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.card {
+  @include flex-center(column, flex-start, stretch);
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid #eae5df;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+
+  .image {
+    object-fit: cover;
+    transform: scale(1.25);
+    will-change: transform;
+    transition: filter 0.3s ease;
+  }
+}
+
+.cardContent {
+  @include flex-center(column, space-between, flex-start);
+  padding: 1.5rem;
+  flex-grow: 1;
+  gap: 1.25rem;
+
+  .cardTitle {
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: #3b322c;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background-color: #f7eee9;
+    color: #8c6d58;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-family: sans-serif;
+    letter-spacing: 0.02em;
+  }
+}
+
+.button {
+  background: transparent;
+  border: 1px solid #8c6d58;
+  color: #8c6d58;
+  padding: 0.8rem 2.2rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #8c6d58;
+    color: #ffffff;
+  }
+}

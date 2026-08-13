@@ -2,6 +2,12 @@
 
 import styles from "./style.module.scss";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
+import { SplitText } from "gsap/SplitText";
+
+gsap.registerPlugin(SplitText, useGSAP);
 
 interface SlideData {
     src: string;
@@ -9,6 +15,7 @@ interface SlideData {
     title: string;
     subtitle: string;
 }
+
 
 const SLIDES: SlideData[] = [
     {
@@ -44,8 +51,16 @@ const SLIDES: SlideData[] = [
 ];
 
 export default function Landing() {
+    const landingRef = useRef<HTMLDivElement>(null);
+
+    useGSAP(() => {
+        gsap.set(`${styles.carousel}`, { overflow:"visible", "scroll-snap-type": "none" });
+        gsap.set(`${styles.nav}`, { display: "block" })
+    }, {
+        scope: landingRef,
+    })
     return (
-        <section className={styles.landing}>
+        <section className={styles.landing} ref={landingRef}>
             <div className={styles.carousel} aria-label="Horizontal carousel of resort highlights">
                 {SLIDES.map((slide, index) => (
                     <div key={index} className={styles.carouselSlide}>
@@ -57,14 +72,14 @@ export default function Landing() {
                             sizes="(max-width: 768px) 88vw, 70vw"
                         />
                         <div className={styles.slideContent}>
-                            <h2>{slide.title}</h2>
+                            <h1>{slide.title}</h1>
                             <h5>{slide.subtitle}</h5>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <nav className={styles.carouselNav} aria-label="Carousel Controls">
+            <nav className={styles.nav} aria-label="Carousel Controls">
                 <button className={styles.prev} tabIndex={0} aria-label="Previous Slide" />
                 <div className={styles.counter}>{`1/${SLIDES.length}`}</div>
                 <button className={styles.next} tabIndex={0} aria-label="Next Slide" />
