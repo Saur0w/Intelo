@@ -1,5 +1,179 @@
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
 .footer {
-  height: 60vh;
   width: 100vw;
-  background: #f7f7f7;
+  background-color: #faf8f5;
+  padding: 5rem 3rem 3rem;
+  box-sizing: border-box;
+  font-family: serif;
+  color: #3b322c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Top Logo --- */
+.logoWrapper {
+  margin-bottom: 4rem;
+  text-align: center;
+
+  .logo {
+    font-size: 1.6rem;
+    letter-spacing: 0.35em;
+    color: #a04825; // Warm terracotta rust accent
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 0;
+  }
+}
+
+/* --- Main 4 Column Grid --- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  max-width: 1200px;
+  width: 100%;
+  margin-bottom: 4rem;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.columnHeader {
+  font-family: sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #4a3f35;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+
+  li a {
+    color: #5c5046;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #a04825;
+    }
+  }
+}
+
+/* --- Right Column: Connect & Social --- */
+.signUpLink {
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #a04825;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-bottom: 3.5rem;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.socialGroup {
+  .socialIcons {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+
+    a {
+      color: #a04825;
+      transition: transform 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        color: #7d361a;
+      }
+    }
+  }
+}
+
+/* --- Divider Line --- */
+.divider {
+  width: 100%;
+  max-width: 1200px;
+  height: 1px;
+  background-color: #eae3db;
+  margin-bottom: 2rem;
+}
+
+/* --- Bottom Legal Bar --- */
+.bottomBar {
+  @include flex-center(column, center, center);
+  gap: 1.5rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.legalNav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  li {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child)::after {
+      content: "";
+      display: inline-block;
+      width: 1px;
+      height: 12px;
+      background-color: #c8bfb5;
+      margin: 0 1.2rem;
+    }
+
+    a {
+      color: #6e6358;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #a04825;
+      }
+    }
+  }
+}
+
+.copyright {
+  font-size: 0.85rem;
+  color: #7a6e63;
+  margin: 0;
+  text-align: center;
 }
