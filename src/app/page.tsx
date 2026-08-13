@@ -9,12 +9,14 @@ import Five from "@/components/Five";
 import Guide from "@/components/Guide";
 import Shops from "@/components/Shops";
 import Legacy from "@/components/Legacy";
+import Ranch from "@/components/Ranch";
 
 export default function Home() {
   return (
     <div className={styles.page}>
         <Landing />
         <Destination />
+        <Ranch />
         <Offers />
         <Reserve />
         <Five />

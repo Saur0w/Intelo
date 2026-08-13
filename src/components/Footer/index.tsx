@@ -134,7 +134,7 @@ export default function Footer() {
 
                 <div className={styles.column}>
                     <Link href="/" className={styles.signUpLink}>
-                        SIGN UP TO STAY CONNECTED
+                        <PerspectiveText label="SIGN UP TO STAY CONNECTED" />
                     </Link>
 
                     <div className={styles.socialGroup}>

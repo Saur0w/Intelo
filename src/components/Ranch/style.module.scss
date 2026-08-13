@@ -1,0 +1,53 @@
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.ranch {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  background: #f7f7f7;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+
+  .cards {
+    display: flex;
+    gap: 2rem;
+    padding: 0 5vw;
+    width: max-content;
+    will-change: transform;
+
+    .card {
+      flex-shrink: 0;
+      width: 360px;
+      height: 480px;
+      background: #ffffff;
+      overflow: hidden;
+      border: 1px solid #eae3db;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+
+      @media (max-width: 768px) {
+        width: 280px;
+        height: 380px;
+      }
+    }
+  }
+
+  .imageWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .image {
+      object-fit: cover;
+      transform: scale(1.35);
+      will-change: transform;
+    }
+  }
+}
+
