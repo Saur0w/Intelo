@@ -1,4 +1,11 @@
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .landing {
-  height: 100vh;
+  height: 80vh;
   width: 100vw;
+  @include center;
 }
