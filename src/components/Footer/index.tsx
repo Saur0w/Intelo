@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import Link from "next/link";
 import Magnetic from "@/ui/Magnetic"
+import PerspectiveText from "@/ui/PerspectiveText";
 
 gsap.registerPlugin(SplitText, useGSAP, ScrollTrigger);
 
@@ -172,34 +173,22 @@ export default function Footer() {
             <div className={styles.bottomBar}>
                 <ul className={styles.legalNav}>
                     <li>
-                        <Magnetic>
-                            <Link href="/">Terms & Conditions</Link>
-                        </Magnetic>
+                        <Link href="/"><PerspectiveText label="Terms & Conditions" /></Link>
                     </li>
                     <li>
-                        <Magnetic>
-                            <Link href="/">Accessibility</Link>
-                        </Magnetic>
+                        <Link href="/"><PerspectiveText label="Accessibility" /></Link>
                     </li>
                     <li>
-                        <Magnetic>
-                            <Link href="/">Privacy</Link>
-                        </Magnetic>
+                        <Link href="/"><PerspectiveText label="Privacy" /></Link>
                     </li>
                     <li>
-                        <Magnetic>
-                            <Link href="/">Legal</Link>
-                        </Magnetic>
+                        <Link href="/"><PerspectiveText label="Legal" /></Link>
                     </li>
                     <li>
-                        <Magnetic>
-                            <Link href="/">Directory</Link>
-                        </Magnetic>
+                        <Link href="/"><PerspectiveText label="Directory" /></Link>
                     </li>
                     <li>
-                        <Magnetic>
-                            <Link href="/">Sitemap</Link>
-                        </Magnetic>
+                        <Link href="/"><PerspectiveText label="Sitemap" /></Link>
                     </li>
                 </ul>
 
