@@ -1,5 +1,146 @@
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
 .five {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
-  background: #f7f7f7;
+  background-color: #faf8f5;
+  padding: 6rem 3rem;
+  box-sizing: border-box;
+  font-family: serif;
+  color: #3b322c;
+  @include flex-center(column, center, center);
+}
+
+.headerGroup {
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: 4rem;
+
+  .mainTitle {
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    letter-spacing: 0.25em;
+    color: #4a3f35;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  .mainSubtext {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #6e645a;
+    font-style: italic;
+    margin: 0;
+  }
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4rem;
+  max-width: 1600px;
+  width: 100%;
+  align-items: center;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+.imageStack {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: #ede7e0;
+
+  @media (max-width: 992px) {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+.imageWrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: inset(100% 0% 0% 0%);
+  will-change: clip-path;
+
+  &.initialVisible {
+    clip-path: inset(0% 0% 0% 0%);
+    z-index: 1;
+  }
+
+  .image {
+    object-fit: cover;
+  }
+}
+
+.pillarsList {
+  display: flex;
+  flex-direction: column;
+
+  .pillarsSubhead {
+    font-family: serif;
+    font-size: 1.1rem;
+    color: #4a3f35;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+}
+
+.pillarItem {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid #eae3db;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .pillarIcon {
+    color: #a04825;
+    margin-top: 0.2rem;
+    transition: transform 0.3s ease;
+  }
+
+  .pillarTitle {
+    font-family: serif;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    color: #3b322c;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 0 0 0.4rem 0;
+    transition: color 0.3s ease;
+  }
+
+  .pillarDesc {
+    font-family: serif;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: #7a6e63;
+    margin: 0;
+  }
+
+  &:hover,
+  &.active {
+    .pillarIcon {
+      transform: translateX(3px);
+    }
+
+    .pillarTitle {
+      color: #a04825;
+    }
+  }
 }

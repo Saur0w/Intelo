@@ -6,6 +6,7 @@ import Destination from "@/components/Destination";
 import Offers from "@/components/Special";
 import Reserve from "@/components/Reserve";
 import Five from "@/components/Five";
+import Guide from "@/components/Guide";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <Offers />
         <Reserve />
         <Five />
+        <Guide />
     </div>
   );
 }
