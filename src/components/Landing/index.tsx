@@ -4,86 +4,255 @@ import styles from "./style.module.scss";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { SplitText } from "gsap/SplitText";
+import { Flip } from "gsap/Flip";
 
-gsap.registerPlugin(SplitText, useGSAP);
+gsap.registerPlugin(SplitText, useGSAP, Flip);
 
-interface SlideData {
+interface WorkItem {
     src: string;
     alt: string;
     title: string;
     subtitle: string;
+    color: string;
 }
 
-
-const SLIDES: SlideData[] = [
+const items: WorkItem[] = [
     {
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmfld06mjrmei07k2qpwbq1i5",
-        alt: "A woman holding a crystal to her forehead",
+        alt: "A woman holding a crystal",
         title: "THE #1 WELLNESS RESORT",
-        subtitle: "by the Michelin Guide 2025",
+        subtitle: "Michelin Guide 2025 Highest Distinction",
+        color: "#E8E2D5",
     },
     {
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl5mq60pfj07k3op7zp8yc",
-        alt: "A group floating sound meditation",
+        alt: "Sound bath meditation session",
         title: "SOUND MEDITATION",
-        subtitle: "Find inner equilibrium & deep peace",
+        subtitle: "Inner equilibrium & deep resonance",
+        color: "#D9E3D8",
     },
     {
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl78c60nco06l8xs20sewx",
-        alt: "A woman getting a hot stone massage",
+        alt: "Hot stone therapeutic massage",
         title: "BODY & MIND RESTORATION",
         subtitle: "Holistic treatments designed for longevity",
+        color: "#E5DDD8",
     },
     {
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl8jdd0vad06k3d59l3re1",
-        alt: "A woman walking on a trail",
+        alt: "Woman hiking in desert sanctuary",
         title: "IMMERSE IN NATURE",
-        subtitle: "Guided outdoor adventures in Tucson & Lenox",
+        subtitle: "Guided outdoor exploration in Tucson & Lenox",
+        color: "#DFE5E8",
     },
     {
-        src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl9yjd0ygl06k33g8ie53b",
-        alt: "A man on a treadmill with a performance scientist",
-        title: "PEAK PERFORMANCE",
-        subtitle: "Data-driven sports medicine & human science",
+        src: "/texture/landing.jpg",
+        alt: "Skin Care",
+        title: "SKIN CARE",
+        subtitle: "Personalized care for skin health",
+        color: "#E8E2D5",
     },
 ];
 
 export default function Landing() {
     const landingRef = useRef<HTMLDivElement>(null);
+    const stackRef = useRef<HTMLDivElement>(null);
+    const centerTextRef = useRef<HTMLParagraphElement>(null);
+    const counterRef = useRef<HTMLSpanElement>(null);
+    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const [isSpread, setIsSpread] = useState<boolean>(false);
+    const isSpreadRef = useRef<boolean>(false);
 
-    useGSAP(() => {
-        gsap.set(`${styles.carousel}`, { overflow:"visible", "scroll-snap-type": "none" });
-        gsap.set(`${styles.nav}`, { display: "block" })
-    }, {
-        scope: landingRef,
-    })
+    const handleSelect = (index: number) => {
+        if (!isSpreadRef.current || index === activeIndex) return;
+        setActiveIndex(index);
+
+        gsap.fromTo(
+            `.${styles.showcaseImg}`,
+            { opacity: 0.4, scale: 1.04 },
+            { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
+        );
+    };
+
+    useGSAP(
+        () => {
+            const cards = gsap.utils.toArray<HTMLElement>(`.${styles.thumbCard}`);
+            if (!cards.length || !stackRef.current || !centerTextRef.current) return;
+
+            const splitText = new SplitText(centerTextRef.current, {
+                type: "words,lines",
+            });
+
+            const masterTl = gsap.timeline({ delay: 0.2 });
+
+            // 1. Initial Center Shuffle with live counter
+            cards.forEach((card, i) => {
+                if (i < cards.length - 1) {
+                    masterTl
+                        .to(card, {
+                            opacity: 0,
+                            duration: 0.35,
+                            ease: "power1.inOut",
+                            onStart: () => {
+                                if (counterRef.current) {
+                                    counterRef.current.innerText = `0${i + 2}`;
+                                }
+                            },
+                        })
+                        .to({}, { duration: 0.12 });
+                }
+            });
+
+            // 2. Flip from Center Stack to Final Left Column Position
+            masterTl.add(() => {
+                gsap.set(cards, { opacity: 1 });
+
+                // Capture initial center stack bounds
+                const state = Flip.getState(cards);
+
+                // Apply final CSS class
+                stackRef.current?.classList.add(styles.isSpread);
+
+                // Execute fluid flip to left column
+                Flip.from(state, {
+                    duration: 1.3,
+                    ease: "power4.inOut",
+                    stagger: 0.05,
+                    absolute: true,
+                    onComplete: () => {
+                        isSpreadRef.current = true;
+                        setIsSpread(true);
+
+                        // Reveal text, layout info & showcase image
+                        gsap.to(
+                            [
+                                `.${styles.featuredLabel}`,
+                                `.${styles.centerCol}`,
+                                `.${styles.rightCol}`,
+                            ],
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.7,
+                                stagger: 0.08,
+                                ease: "power3.out",
+                            }
+                        );
+
+                        gsap.fromTo(
+                            splitText.words,
+                            { y: 15, opacity: 0 },
+                            {
+                                y: 0,
+                                opacity: 1,
+                                duration: 0.5,
+                                stagger: 0.015,
+                                ease: "power2.out",
+                            }
+                        );
+                    },
+                });
+            }, "+=0.2");
+
+            return () => {
+                splitText.revert();
+            };
+        },
+        { scope: landingRef }
+    );
+
     return (
         <section className={styles.landing} ref={landingRef}>
-            <div className={styles.carousel} aria-label="Horizontal carousel of resort highlights">
-                {SLIDES.map((slide, index) => (
-                    <div key={index} className={styles.carouselSlide}>
-                        <Image
-                            src={slide.src}
-                            alt={slide.alt}
-                            fill
-                            priority={index === 0}
-                            sizes="(max-width: 768px) 88vw, 70vw"
-                        />
-                        <div className={styles.slideContent}>
-                            <h1>{slide.title}</h1>
-                            <h5>{slide.subtitle}</h5>
+            <div className={styles.gridContainer}>
+                {/* Left Column: Stack/Thumbnails */}
+                <div className={styles.leftCol}>
+                    <span className={styles.featuredLabel}>FEATURED EXPERIENCES</span>
+
+                    <div
+                        className={`${styles.thumbStack} ${isSpread ? styles.isSpread : ""}`}
+                        ref={stackRef}
+                    >
+                        <div className={styles.introCounter}>
+                            <span>&larr;</span>
+                            <span ref={counterRef}>01</span>
+                            <span>/ 0{items.length}</span>
+                        </div>
+
+                        {items.map((item, index) => (
+                            <div
+                                key={index}
+                                data-flip-id={`thumb-${index}`}
+                                className={`${styles.thumbCard} ${
+                                    activeIndex === index && isSpread ? styles.activeThumb : ""
+                                }`}
+                                style={
+                                    {
+                                        zIndex: items.length - index,
+                                        "--accent-bg": item.color,
+                                    } as React.CSSProperties
+                                }
+                                onClick={() => handleSelect(index)}
+                                onMouseEnter={() => handleSelect(index)}
+                            >
+                                <div className={styles.thumbWrapper}>
+                                    <Image
+                                        src={item.src}
+                                        alt={item.alt}
+                                        fill
+                                        unoptimized
+                                        priority={index === 0}
+                                        className={styles.image}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Center Column: Statement & Meta */}
+                <div className={styles.centerCol}>
+                    <div className={styles.statementWrapper}>
+                        <p className={styles.statement} ref={centerTextRef}>
+                            Canyon Ranch is an integrative wellness pioneer redefining human
+                            longevity with time-honored practices, medical science, and
+                            transformative journeys.
+                        </p>
+                    </div>
+
+                    <div className={styles.footerMeta}>
+                        <div className={styles.metaBlock}>
+                            <h4>ESTATE LOCATIONS</h4>
+                            <p>TUCSON • LENOX • WOODSIDE • AUSTIN</p>
+                        </div>
+                        <div className={styles.metaBlock}>
+                            <h4>SANCTUARY</h4>
+                            <p>CANYONRANCH.COM</p>
                         </div>
                     </div>
-                ))}
-            </div>
+                </div>
 
-            <nav className={styles.nav} aria-label="Carousel Controls">
-                <button className={styles.prev} tabIndex={0} aria-label="Previous Slide" />
-                <div className={styles.counter}>{`1/${SLIDES.length}`}</div>
-                <button className={styles.next} tabIndex={0} aria-label="Next Slide" />
-            </nav>
+                {/* Right Column: Active Showcase */}
+                <div className={styles.rightCol}>
+                    <div className={styles.showcaseWrapper}>
+                        <Image
+                            src={items[activeIndex].src}
+                            alt={items[activeIndex].alt}
+                            fill
+                            unoptimized
+                            priority
+                            className={styles.showcaseImg}
+                        />
+                    </div>
+                    <div className={styles.showcaseCaption}>
+                        <span className={styles.captionTag}>[ 0{activeIndex + 1} ]</span>
+                        <span className={styles.captionTitle}>
+              {items[activeIndex].title}
+            </span>
+                    </div>
+                </div>
+            </div>
         </section>
     );
 }

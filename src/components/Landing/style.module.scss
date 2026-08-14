@@ -1,102 +1,224 @@
-@mixin flex-center($direction: row, $justify: center, $align: center) {
-  display: flex;
-  flex-direction: $direction;
-  justify-content: $justify;
-  align-items: $align;
-}
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap");
 
 .landing {
-  width: 100%;
-  min-height: 80vh;
   position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #faf8f5;
+  color: #1a1816;
+  font-family: "Syne", sans-serif;
   overflow: hidden;
-  @include flex-center(column);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
 
-  .carousel {
-    width: 100%;
-    height: 80vh;
-    gap: 12px;
+.gridContainer {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 280px 1.2fr 1fr;
+  padding: 140px 3.5rem 3.5rem;
+  gap: 3rem;
+  box-sizing: border-box;
+  align-items: stretch;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: 220px 1fr 1fr;
+    gap: 2rem;
+    padding-top: 100px;
+  }
+
+  @media (max-width: 850px) {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    flex-direction: column;
+    padding: 1.5rem;
+    padding-top: 80px;
+  }
+}
 
-    &::-webkit-scrollbar {
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  .featuredLabel {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #8c827a;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.thumbStack {
+  /* 1. Initial State: Centered Showcase */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 58vw;
+  height: 72vh;
+  z-index: 100;
+
+  .introCounter {
+    position: absolute;
+    left: -4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1a1816;
+    letter-spacing: 0.1em;
+  }
+
+  .thumbCard {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--accent-bg, #edeae3);
+    padding: 14px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  /* 2. Spread State (Final Fixed Position on Left Column) */
+  &.isSpread {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    z-index: 5;
+
+    .introCounter {
       display: none;
     }
-    -ms-overflow-style: none;
-    scrollbar-width: none;
 
-    .carouselSlide {
+    .thumbCard {
       position: relative;
-      flex: 0 0 75%;
-      @include flex-center(column);
-      color: white;
-      scroll-snap-align: center;
-      overflow: hidden;
+      inset: auto;
+      width: 140px;
+      height: 95px;
+      padding: 6px;
+      // No CSS transform transition here so Flip locks in permanently without bouncing
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 
-      img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      &:hover,
+      &.activeThumb {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
       }
 
-      h1 {
-        position: relative;
-        margin: 0;
-        font-size: 1.8rem;
-      }
-
-      h5 {
-        position: relative;
-        margin: 2% 0 0 0;
-        font-size: 1rem;
-        font-weight: 100;
-        letter-spacing: 0.3px;
+      &.activeThumb {
+        outline: 1.5px solid #1a1816;
+        outline-offset: 3px;
       }
     }
   }
+}
 
-  .nav {
-    display: none;
-    position: absolute;
+.thumbWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .image {
+    object-fit: cover;
+  }
+}
+
+.centerCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem 0;
+  opacity: 0;
+  transform: translateY(15px);
+
+  .statementWrapper {
+    max-width: 480px;
+  }
+
+  .statement {
+    font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+    font-weight: 700;
+    line-height: 1.28;
+    letter-spacing: -0.035em;
+    color: #1a1816;
+    margin: 0;
+  }
+
+  .footerMeta {
+    display: flex;
+    gap: 3rem;
+    padding-top: 2rem;
+
+    .metaBlock {
+      h4 {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        color: #8c827a;
+        margin: 0 0 0.4rem 0;
+      }
+
+      p {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: #1a1816;
+        margin: 0;
+      }
+    }
+  }
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(15px);
+
+  .showcaseWrapper {
+    position: relative;
     width: 100%;
+    height: 72vh;
+    overflow: hidden;
+    background-color: #edeae3;
 
-    button {
-      cursor: pointer;
-      border: none;
-      font-size: 3rem;
-      position: absolute;
-      aspect-ratio: 1.5;
-      width: 7vw;
-      max-width: 75px;
-      height: auto;
-      max-height: 3.7vh;
-      background-color: transparent;
-      background-size: cover;
-      overflow: visible;
-      background-image: url("data:image/svg+xml,%3Csvg stroke='%23fff' fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 1 22 15'%3E%3Cpath d='M2,11 11,2 20,11'/%3E%3C/svg%3E");
+    @media (max-width: 850px) {
+      height: 50vh;
     }
 
-    .prev {
-      transform: translateY(-50%) rotate(-90deg);
+    .showcaseImg {
+      object-fit: cover;
     }
+  }
 
-    .next {
-      transform: translateY(-50%) rotate(90deg);
-    }
+  .showcaseCaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #1a1816;
 
-    div {
-      position: absolute;
-      width: 100%;
-      top: 36vh;
-      text-align: center;
-      color: #fff;
-      font-weight: 200;
-      opacity: 0.5;
-      letter-spacing: 0.25rem;
-      font-size: clamp(22px, 3.9vw, 44px);
+    .captionTag {
+      color: #a04825;
     }
   }
 }
