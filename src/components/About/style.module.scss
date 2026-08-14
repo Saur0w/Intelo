@@ -1,6 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+// -------------------------------------------------------------
+// Variables & Mixins
+// -------------------------------------------------------------
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+$color-bg: #f8f6f0; // Warm editorial linen
+$color-text: #171615; // Deep graphite
+$color-text-muted: #79746e; // Mineral taupe
+$color-accent: #c4a482; // Warm desert gold
+$color-border: rgba(23, 22, 21, 0.1);
+$mobile-bp: 768px;
+$tablet-bp: 1024px;
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// -------------------------------------------------------------
+// Component Styles
+// -------------------------------------------------------------
 .about {
-  height: 80vh;
+  position: relative;
   width: 100vw;
+  min-height: 100vh;
+  background-color: $color-bg;
+  color: $color-text;
+  font-family: $font-sans;
+  padding: clamp(4rem, 10vw, 8.5rem) 0;
   overflow: hidden;
-  background: #f7f7f7;
+}
+
+.container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+}
+
+// -------------------------------------------------------------
+// Split-Text Word Mask Helpers
+// -------------------------------------------------------------
+.wordWrapper {
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.15em;
+
+  .wordInner {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+}
+
+// -------------------------------------------------------------
+// Header Section
+// -------------------------------------------------------------
+.header {
+  margin-bottom: clamp(3rem, 7vw, 5.5rem);
+
+  .subLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: clamp(0.7rem, 1.2vw, 0.82rem);
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: $color-text-muted;
+    margin-bottom: 1.25rem;
+
+    .badgeDot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: $color-accent;
+    }
+  }
+
+  .mainTitle {
+    font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+    color: $color-text;
+    max-width: 18ch;
+    margin: 0;
+  }
+}
+
+// -------------------------------------------------------------
+// Editorial Manifesto Block
+// -------------------------------------------------------------
+.manifestoWrapper {
+  border-top: 1px solid $color-border;
+  border-bottom: 1px solid $color-border;
+  padding: clamp(2.75rem, 5.5vw, 4.5rem) 0;
+  margin-bottom: clamp(4rem, 8vw, 7.5rem);
+
+  .manifestoText {
+    font-size: clamp(1.25rem, 2.7vw, 2.25rem);
+    font-weight: 300;
+    line-height: 1.38;
+    letter-spacing: -0.02em;
+    color: $color-text;
+    max-width: 44ch;
+    margin: 0;
+
+    .manifestoLead {
+      font-weight: 500;
+      color: $color-text;
+    }
+  }
+}
+
+// -------------------------------------------------------------
+// Two-Column Story Layout
+// -------------------------------------------------------------
+.storySection {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+  position: relative;
+  margin-bottom: clamp(4.5rem, 9vw, 8.5rem);
+
+  @media (max-width: $tablet-bp) {
+    grid-template-columns: 1fr;
+  }
+
+  .stickyColumn {
+    position: sticky;
+    top: 5rem;
+
+    @media (max-width: $tablet-bp) {
+      position: static;
+      margin-bottom: 2rem;
+    }
+
+    .stickyIndex {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: $color-accent;
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+    }
+
+    .stickyHeading {
+      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: $color-text;
+      margin: 0 0 1.25rem 0;
+    }
+
+    .stickyDescription {
+      font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+      font-weight: 400;
+      line-height: 1.65;
+      color: $color-text-muted;
+      margin: 0;
+      max-width: 32ch;
+    }
+  }
+
+  .storyList {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 4.5vw, 3.5rem);
+
+    .storyCard {
+      position: relative;
+
+      .cardLine {
+        width: 100%;
+        height: 1px;
+        background-color: $color-border;
+        margin-bottom: clamp(1.5rem, 2.5vw, 2.25rem);
+      }
+
+      .cardBody {
+        will-change: transform, opacity;
+
+        .cardMeta {
+          display: flex;
+          align-items: baseline;
+          gap: 1.25rem;
+          margin-bottom: 0.85rem;
+
+          .cardYear {
+            font-size: clamp(1.35rem, 2vw, 1.85rem);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            color: $color-text;
+          }
+
+          .cardTag {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: $color-accent;
+          }
+        }
+
+        .cardTitle {
+          font-size: clamp(1.2rem, 1.75vw, 1.5rem);
+          font-weight: 500;
+          letter-spacing: -0.015em;
+          color: $color-text;
+          margin: 0 0 0.85rem 0;
+        }
+
+        .cardDesc {
+          font-size: clamp(0.95rem, 1.15vw, 1.02rem);
+          font-weight: 400;
+          line-height: 1.7;
+          color: $color-text-muted;
+          margin: 0;
+          max-width: 52ch;
+        }
+      }
+    }
+  }
+}
+
+// -------------------------------------------------------------
+// Stats Grid
+// -------------------------------------------------------------
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  border-top: 1px solid $color-border;
+  border-bottom: 1px solid $color-border;
+  padding: clamp(2.5rem, 5vw, 4rem) 0;
+  margin-bottom: clamp(4rem, 8vw, 7rem);
+
+  @media (max-width: $tablet-bp) {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 2.5rem;
+  }
+
+  @media (max-width: $mobile-bp) {
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+
+  .statItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .statNumber {
+      font-size: clamp(2.5rem, 4.5vw, 4rem);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: $color-text;
+    }
+
+    .statLabel {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $color-text-muted;
+    }
+  }
+}
+
+// -------------------------------------------------------------
+// Footer Note / Quote
+// -------------------------------------------------------------
+.footerNote {
+  text-align: center;
+  max-width: 46ch;
+  margin: 0 auto;
+
+  .quote {
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.6;
+    color: $color-text;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .signature {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: $color-accent;
+  }
 }

@@ -15,6 +15,8 @@ import Preloader from "@/components/Preloader";
 import { useState } from "react";
 import Header from "@/components/Header";
 import About from "@/components/About";
+import Des from "@/components/Des";
+import Brands from "@/components/Brands";
 
 export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -23,8 +25,10 @@ export default function Home() {
         {!isLoaded && <Preloader onComplete={() => setIsLoaded(true)} />}
         <Header isLoaded={isLoaded} />
         <Landing isLoaded={isLoaded} />
+        <Des />
         <About />
         <Destination />
+        <Brands />
         <Ranch />
         <Offers />
         <Reserve />
