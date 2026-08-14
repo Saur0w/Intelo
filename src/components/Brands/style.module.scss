@@ -16,8 +16,6 @@ $section-border: rgba(23, 22, 21, 0.08);
   background-color: $section-bg;
   padding: clamp(2rem, 4vw, 3rem) 0;
   overflow: hidden;
-  border-top: 1px solid $section-border;
-  border-bottom: 1px solid $section-border;
 }
 
 .marqueeViewport {
