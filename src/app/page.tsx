@@ -10,6 +10,7 @@ import Guide from "@/components/Guide";
 import Shops from "@/components/Shops";
 import Legacy from "@/components/Legacy";
 import Ranch from "@/components/Ranch";
+import Contact from "@/components/Get";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
         <Guide />
         <Shops />
         <Legacy />
+        <Contact />
     </div>
   );
 }
