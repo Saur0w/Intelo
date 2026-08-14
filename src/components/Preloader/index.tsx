@@ -29,7 +29,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
             if (!preloader || !heading || !counterContainer || !counterNumber) return;
 
-            const split = new SplitText(heading, { type: "chars,words" });
+            const split = new SplitText(heading, {
+                type: "chars,words"
+            });
 
             gsap.set(split.chars, {
                 yPercent: 120,

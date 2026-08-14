@@ -1,16 +1,22 @@
 "use client";
 
-import styles from "./style.module.scss";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
-import gsap from "gsap";
+import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import styles from "./style.module.scss";
 
-gsap.registerPlugin(useGSAP);
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(useGSAP);
+}
 
 interface NavLink {
     label: string;
     href: string;
+}
+
+interface HeaderProps {
+    isLoaded: boolean;
 }
 
 const navLinks: NavLink[] = [
@@ -21,9 +27,10 @@ const navLinks: NavLink[] = [
     { label: "Shop", href: "/" },
 ];
 
-export default function Header() {
+export default function Header({ isLoaded }: HeaderProps) {
     const headerRef = useRef<HTMLElement>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const [theme, setTheme] = useState<"dark" | "light">("dark");
     const [time, setTime] = useState("");
 
@@ -43,75 +50,120 @@ export default function Header() {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrolled = window.scrollY > 40;
+            setIsScrolled(scrolled);
+
+            if (scrolled) {
+                setTheme("light");
+            } else {
+                const elem = document.elementFromPoint(window.innerWidth / 2, 50);
+                const themedSection = elem?.closest("[data-theme]");
+                const isDarkSection = themedSection
+                    ? themedSection.getAttribute("data-theme") === "dark"
+                    : true;
+                setTheme(isDarkSection ? "dark" : "light");
+            }
+        };
+
+        handleScroll();
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     useGSAP(
         () => {
             const header = headerRef.current;
             if (!header) return;
 
-            gsap.fromTo(
-                header,
-                { y: -30, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.9,
-                    delay: 0.2,
-                    ease: "power3.out",
-                }
+            const logoInner = header.querySelector(`.${styles.logoInner}`);
+            const estDate = header.querySelector(`.${styles.estDate}`);
+            const navItems = gsap.utils.toArray<HTMLElement>(`.${styles.navLink}`);
+            const rightItems = gsap.utils.toArray<HTMLElement>(
+                `.${styles.locationTime}, .${styles.reserveBtn}, .${styles.menuToggle}`
             );
 
-            const handleScroll = () => {
-                const scrolled = window.scrollY > 40;
-                if (scrolled) {
-                    header.classList.add(styles.isScrolled);
-                    header.classList.add(styles.themeLight);
-                    header.classList.remove(styles.themeDark);
-                    setTheme("light");
-                } else {
-                    header.classList.remove(styles.isScrolled);
-                    // Check element beneath header
-                    const elem = document.elementFromPoint(window.innerWidth / 2, 50);
-                    const themedSection = elem?.closest("[data-theme]");
-                    const isDarkSection = themedSection ? themedSection.getAttribute("data-theme") === "dark" : true;
+            if (!isLoaded) {
+                gsap.set(header, { autoAlpha: 0 });
+                gsap.set(logoInner, { yPercent: 120 });
+                gsap.set(estDate, { opacity: 0 });
+                gsap.set(navItems, { yPercent: 120, opacity: 0 });
+                gsap.set(rightItems, { opacity: 0, x: 15 });
+                return;
+            }
 
-                    if (isDarkSection) {
-                        header.classList.add(styles.themeDark);
-                        header.classList.remove(styles.themeLight);
-                        setTheme("dark");
-                    } else {
-                        header.classList.add(styles.themeLight);
-                        header.classList.remove(styles.themeDark);
-                        setTheme("light");
-                    }
-                }
-            };
+            const tl = gsap.timeline({
+                defaults: { ease: "power3.out" },
+                delay: 0.1,
+            });
 
-            handleScroll();
-            window.addEventListener("scroll", handleScroll, { passive: true });
-            return () => window.removeEventListener("scroll", handleScroll);
+            tl.to(header, { autoAlpha: 1, duration: 0.4 })
+                .to(
+                    logoInner,
+                    {
+                        yPercent: 0,
+                        duration: 0.9,
+                    },
+                    0.1
+                )
+                .to(
+                    estDate,
+                    {
+                        opacity: 1,
+                        duration: 0.8,
+                    },
+                    0.3
+                )
+                .to(
+                    navItems,
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        stagger: 0.04,
+                    },
+                    0.25
+                )
+                .to(
+                    rightItems,
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 0.7,
+                        stagger: 0.05,
+                    },
+                    0.35
+                );
         },
-        { scope: headerRef }
+        { scope: headerRef, dependencies: [isLoaded] }
     );
 
     return (
         <header
-            className={`${styles.header} ${theme === "dark" ? styles.themeDark : styles.themeLight}`}
+            className={`${styles.header} ${
+                theme === "dark" ? styles.themeDark : styles.themeLight
+            } ${isScrolled ? styles.isScrolled : ""}`}
             ref={headerRef}
         >
             <div className={styles.container}>
                 <div className={styles.brand}>
                     <Link href="/" className={styles.logo}>
-                        Canyon Ranch
+            <span className={styles.logoMask}>
+              <span className={styles.logoInner}>Canyon Ranch</span>
+            </span>
                     </Link>
                     <span className={styles.estDate}>[ EST. 1979 ]</span>
                 </div>
 
                 <nav className={styles.navDesktop}>
                     {navLinks.map((link, index) => (
-                        <Link key={index} href={link.href} className={styles.navLink}>
-                            <span className={styles.linkIndex}>0{index + 1}</span>
-                            <span className={styles.linkText}>{link.label}</span>
-                        </Link>
+                        <div key={index} className={styles.navLinkMask}>
+                            <Link href={link.href} className={styles.navLink}>
+                                <span className={styles.linkIndex}>0{index + 1}</span>
+                                <span className={styles.linkText}>{link.label}</span>
+                            </Link>
+                        </div>
                     ))}
                 </nav>
 
@@ -129,9 +181,10 @@ export default function Header() {
                     </Link>
 
                     <button
+                        type="button"
                         className={`${styles.menuToggle} ${isMenuOpen ? styles.open : ""}`}
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Toggle Menu"
+                        aria-label="Toggle Navigation Menu"
                     >
                         <span />
                         <span />
@@ -157,10 +210,11 @@ export default function Header() {
                         </Link>
                     ))}
                 </div>
+
                 <div className={styles.mobileFooter}>
                     <p>THE ARCHITECTURE OF WELL-BEING</p>
                     <Link
-                        href="/"
+                        href="/reserve"
                         className={styles.mobileReserveBtn}
                         onClick={() => setIsMenuOpen(false)}
                     >

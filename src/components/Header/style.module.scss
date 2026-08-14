@@ -170,6 +170,17 @@
     text-decoration: none;
     text-transform: capitalize;
     transition: color 0.35s ease;
+    display: inline-flex;
+
+    .logoMask {
+      display: inline-flex;
+      overflow: hidden;
+
+      .logoInner {
+        display: inline-block;
+        will-change: transform, opacity;
+      }
+    }
   }
 
   .estDate {
@@ -177,6 +188,7 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     transition: color 0.35s ease;
+    will-change: transform, opacity;
   }
 }
 
@@ -189,6 +201,11 @@
     display: none;
   }
 
+  .navLinkMask {
+    display: inline-flex;
+    overflow: hidden;
+  }
+
   .navLink {
     position: relative;
     display: flex;
@@ -199,6 +216,7 @@
     font-weight: 600;
     letter-spacing: 0.04em;
     transition: opacity 0.3s ease, color 0.35s ease;
+    will-change: transform, opacity;
 
     .linkIndex {
       font-size: 0.6rem;

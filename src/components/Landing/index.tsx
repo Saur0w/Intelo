@@ -14,6 +14,10 @@ export interface SlideItem {
     color: string;
 }
 
+interface LandingProps {
+    isLoaded: boolean;
+}
+
 const slides: SlideItem[] = [
     {
         src: "/texture/landing.jpg",
@@ -23,7 +27,7 @@ const slides: SlideItem[] = [
         color: "#E8E2D5",
     },
     {
-        src: "/texture/2.jpg",
+        src: "/texture/3.jpg",
         alt: "Skin Care",
         title: "SKIN CARE",
         subtitle: "Personalized care for skin health",
@@ -89,7 +93,7 @@ function SplitTextSubtitle({ text }: { text: string }) {
     );
 }
 
-export default function Landing() {
+export default function Landing({ isLoaded }: LandingProps) {
     const landingRef = useRef<HTMLDivElement>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const prevIndexRef = useRef(0);
@@ -117,7 +121,7 @@ export default function Landing() {
 
             const incomingImage = incomingSlide.querySelector(`.${styles.imageInner}`);
             const outgoingImage = outgoingSlide.querySelector(`.${styles.imageInner}`);
-            
+
             const outgoingChars = outgoingSlide.querySelectorAll(`.${styles.charInner}`);
             const outgoingSubWords = outgoingSlide.querySelectorAll(`.${styles.subWordInner}`);
 
@@ -250,7 +254,7 @@ export default function Landing() {
     useGSAP(
         () => {
             const container = landingRef.current;
-            if (!container) return;
+            if (!isLoaded || !container) return;
 
             const allSlides = container.querySelectorAll<HTMLElement>(`.${styles.slide}`);
             allSlides.forEach((slide, idx) => {
@@ -301,7 +305,7 @@ export default function Landing() {
                 }
             });
         },
-        { scope: landingRef }
+        { scope: landingRef, dependencies: [isLoaded] }
     );
 
     const handleNext = () => {

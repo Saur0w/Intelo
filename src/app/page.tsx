@@ -13,13 +13,15 @@ import Ranch from "@/components/Ranch";
 import Contact from "@/components/Get";
 import Preloader from "@/components/Preloader";
 import { useState } from "react";
+import Header from "@/components/Header";
 
 export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
   return (
     <div className={styles.page}>
-        <Preloader onComplete={isLoaded ? () => {} : () => setIsLoaded(true)} />
-        <Landing />
+        {!isLoaded && <Preloader onComplete={() => setIsLoaded(true)} />}
+        <Header isLoaded={isLoaded} />
+        <Landing isLoaded={isLoaded} />
         <Destination />
         <Ranch />
         <Offers />
