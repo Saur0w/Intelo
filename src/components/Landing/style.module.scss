@@ -51,6 +51,9 @@
         object-position: center;
         user-select: none;
         pointer-events: none;
+        height: 125% !important;
+        top: -12.5% !important;
+        will-change: transform;
       }
 
       .overlay {

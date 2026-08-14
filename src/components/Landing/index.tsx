@@ -4,7 +4,12 @@ import React, { useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./style.module.scss";
+
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(useGSAP, ScrollTrigger);
+}
 
 export interface SlideItem {
     src: string;
@@ -15,7 +20,7 @@ export interface SlideItem {
 }
 
 interface LandingProps {
-    isLoaded: boolean;
+    isLoaded?: boolean;
 }
 
 const slides: SlideItem[] = [
@@ -254,7 +259,52 @@ export default function Landing({ isLoaded }: LandingProps) {
     useGSAP(
         () => {
             const container = landingRef.current;
-            if (!isLoaded || !container) return;
+            if (!container) return;
+
+            // Parallax on scroll
+            const imageElements = container.querySelectorAll(`.${styles.image}`);
+            const contentElements = container.querySelectorAll(`.${styles.content}`);
+            const controlsElement = container.querySelector(`.${styles.controls}`);
+
+            const parallaxTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: 0.6,
+                    invalidateOnRefresh: true,
+                },
+            });
+
+            parallaxTl
+                .to(
+                    imageElements,
+                    {
+                        yPercent: 18,
+                        ease: "none",
+                    },
+                    0
+                )
+                .to(
+                    contentElements,
+                    {
+                        y: 160,
+                        opacity: 0.1,
+                        ease: "none",
+                    },
+                    0
+                )
+                .to(
+                    controlsElement,
+                    {
+                        y: 70,
+                        opacity: 0,
+                        ease: "none",
+                    },
+                    0
+                );
+
+            if (isLoaded === false) return;
 
             const allSlides = container.querySelectorAll<HTMLElement>(`.${styles.slide}`);
             allSlides.forEach((slide, idx) => {
