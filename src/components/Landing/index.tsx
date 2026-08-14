@@ -27,15 +27,15 @@ const slides: SlideItem[] = [
     {
         src: "/texture/landing.jpg",
         alt: "Skin Care",
-        title: "SKIN CARE",
-        subtitle: "Personalized care for skin health",
+        title: "BOTANICAL NOURISHMENT",
+        subtitle: "TARGETED RESTORATION & MINERAL ALCHEMY",
         color: "#E8E2D5",
     },
     {
         src: "/texture/3.jpg",
-        alt: "Skin Care",
-        title: "SKIN CARE",
-        subtitle: "Personalized care for skin health",
+        alt: "IMMERSIVE HAVENS",
+        title: "IMMERSIVE HAVENS",
+        subtitle: "SPATIAL TRANQUILITY & MINDFUL LIVING",
         color: "#E8E2D5",
     },
     {

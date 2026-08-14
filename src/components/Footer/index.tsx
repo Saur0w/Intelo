@@ -15,6 +15,10 @@ if (typeof window !== "undefined") {
 export default function Footer() {
     const footerRef = useRef<HTMLElement>(null);
     const statementRef = useRef<HTMLHeadingElement>(null);
+    const inquiryLabelRef = useRef<HTMLSpanElement>(null);
+    const inquiryLinkRef = useRef<HTMLAnchorElement>(null);
+    const newsletterLabelRef = useRef<HTMLSpanElement>(null);
+    const newsletterFormRef = useRef<HTMLFormElement>(null);
     const logoSvgRef = useRef<SVGSVGElement>(null);
 
     useGSAP(
@@ -22,58 +26,146 @@ export default function Footer() {
             const footer = footerRef.current;
             const logoSvg = logoSvgRef.current;
             const statement = statementRef.current;
-            if (!footer || !logoSvg) return;
+            if (!footer) return;
 
+            // 1. Statement Split Text Mask Reveal
+            let splitStatement: SplitText | null = null;
             if (statement) {
-                const split = new SplitText(statement, {
-                    type: "words",
+                splitStatement = new SplitText(statement, {
+                    type: "lines, words, chars",
+                    linesClass: styles.maskLine,
                     wordsClass: styles.wordWrap,
                 });
+                gsap.set(splitStatement.lines, { overflow: "hidden" });
 
-                gsap.from(split.words, {
-                    yPercent: 110,
+                gsap.from(splitStatement.chars, {
+                    yPercent: 120,
                     opacity: 0,
-                    duration: 0.9,
-                    stagger: 0.03,
-                    ease: "power3.out",
+                    duration: 1.1,
+                    stagger: 0.02,
+                    ease: "power4.out",
                     scrollTrigger: {
                         trigger: footer,
-                        start: "top 75%",
+                        start: "top 78%",
+                        toggleActions: "play none none reverse",
                     },
                 });
             }
 
-            const infoElements = footer.querySelectorAll(
-                `.${styles.inquiryBlock}, .${styles.newsletterBlock}, .${styles.navCol}`
-            );
+            // 2. Inquiry & Newsletter Split Text Mask Reveals
+            const splitTargets: HTMLElement[] = [];
+            if (inquiryLabelRef.current) splitTargets.push(inquiryLabelRef.current);
+            if (inquiryLinkRef.current) splitTargets.push(inquiryLinkRef.current);
+            if (newsletterLabelRef.current) splitTargets.push(newsletterLabelRef.current);
 
-            gsap.from(infoElements, {
-                y: 35,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.08,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: footer,
-                    start: "top 70%",
-                },
-            });
+            let splitInquiryNews: SplitText | null = null;
+            if (splitTargets.length > 0) {
+                splitInquiryNews = new SplitText(splitTargets, {
+                    type: "lines, words",
+                    linesClass: styles.maskLine,
+                });
+                gsap.set(splitInquiryNews.lines, { overflow: "hidden" });
 
-            gsap.fromTo(
-                logoSvg,
-                { yPercent: 30, opacity: 0.7 },
-                {
-                    yPercent: 0,
-                    opacity: 1,
-                    ease: "none",
+                gsap.from(splitInquiryNews.words, {
+                    yPercent: 115,
+                    opacity: 0,
+                    duration: 0.85,
+                    stagger: 0.018,
+                    ease: "power3.out",
                     scrollTrigger: {
                         trigger: footer,
-                        start: "top bottom",
-                        end: "bottom bottom",
-                        scrub: 0.5,
+                        start: "top 72%",
+                        toggleActions: "play none none reverse",
                     },
-                }
-            );
+                });
+            }
+
+            if (newsletterFormRef.current) {
+                gsap.from(newsletterFormRef.current, {
+                    y: 25,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: footer,
+                        start: "top 70%",
+                        toggleActions: "play none none reverse",
+                    },
+                });
+            }
+
+            // 3. Navigation Columns & Links Split / Mask Reveal
+            const navLinkItems = footer.querySelectorAll<HTMLElement>(`.${styles.linkMaskItem}`);
+            const locationItems = footer.querySelectorAll<HTMLElement>(`.${styles.locMaskItem}`);
+            const copyrightItem = footer.querySelector<HTMLElement>(`.${styles.copyMaskItem}`);
+
+            if (navLinkItems.length > 0) {
+                gsap.from(navLinkItems, {
+                    yPercent: 120,
+                    opacity: 0,
+                    duration: 0.85,
+                    stagger: 0.03,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: footer,
+                        start: "top 68%",
+                        toggleActions: "play none none reverse",
+                    },
+                });
+            }
+
+            if (locationItems.length > 0) {
+                gsap.from(locationItems, {
+                    yPercent: 110,
+                    opacity: 0,
+                    duration: 0.75,
+                    stagger: 0.04,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: footer,
+                        start: "top 65%",
+                        toggleActions: "play none none reverse",
+                    },
+                });
+            }
+
+            if (copyrightItem) {
+                gsap.from(copyrightItem, {
+                    yPercent: 110,
+                    opacity: 0,
+                    duration: 0.75,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: footer,
+                        start: "top 65%",
+                        toggleActions: "play none none reverse",
+                    },
+                });
+            }
+
+            // 4. Bottom Giant Logo Parallax Scrub
+            if (logoSvg) {
+                gsap.fromTo(
+                    logoSvg,
+                    { yPercent: 30, opacity: 0.6 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footer,
+                            start: "top bottom",
+                            end: "bottom bottom",
+                            scrub: 0.5,
+                        },
+                    }
+                );
+            }
+
+            return () => {
+                if (splitStatement) splitStatement.revert();
+                if (splitInquiryNews) splitInquiryNews.revert();
+            };
         },
         { scope: footerRef }
     );
@@ -92,17 +184,29 @@ export default function Footer() {
                         </h2>
 
                         <div className={styles.inquiryBlock}>
-                            <span className={styles.label}>Reservations & Inquiries:</span>
-                            <Link href="mailto:concierge@canyonranch.com" className={styles.inquiryLink}>
-                                concierge@canyonranch.com
-                            </Link>
+                            <span ref={inquiryLabelRef} className={styles.label}>
+                                Reservations & Inquiries:
+                            </span>
+                            <div className={styles.maskContainer}>
+                                <Link
+                                    ref={inquiryLinkRef}
+                                    href="mailto:concierge@canyonranch.com"
+                                    className={styles.inquiryLink}
+                                >
+                                    concierge@canyonranch.com
+                                </Link>
+                            </div>
                         </div>
 
                         <div className={styles.newsletterBlock}>
-                            <span className={styles.label}>
+                            <span ref={newsletterLabelRef} className={styles.label}>
                                 Sign up for our longevity journal (No spam)
                             </span>
-                            <form className={styles.newsletterForm} onSubmit={handleSubmit}>
+                            <form
+                                ref={newsletterFormRef}
+                                className={styles.newsletterForm}
+                                onSubmit={handleSubmit}
+                            >
                                 <input
                                     type="email"
                                     placeholder="Email"
@@ -119,49 +223,59 @@ export default function Footer() {
                     <div className={styles.rightColumn}>
                         <div className={styles.navCol}>
                             <ul className={styles.linkList}>
-                                <li><Link href="/">Sanctuaries</Link></li>
-                                <li><Link href="/">Rituals</Link></li>
-                                <li><Link href="/">Wellness Lab</Link></li>
-                                <li><Link href="/">Dispensary</Link></li>
-                                <li><Link href="/">Heritage</Link></li>
-                                <li><Link href="/">Contact</Link></li>
+                                {["Sanctuaries", "Rituals", "Wellness Lab", "Dispensary", "Heritage", "Contact"].map((item, idx) => (
+                                    <li key={idx} className={styles.linkMaskLine}>
+                                        <Link href="/" className={styles.linkMaskItem}>
+                                            {item}
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
 
                         <div className={styles.navCol}>
                             <ul className={styles.linkList}>
-                                <li>
-                                    <Link href="https://instagram.com" target="_blank" rel="noreferrer" className={styles.externalLink}>
-                                        Instagram ↗
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="https://linkedin.com" target="_blank" rel="noreferrer" className={styles.externalLink}>
-                                        LinkedIn ↗
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="https://youtube.com" target="_blank" rel="noreferrer" className={styles.externalLink}>
-                                        YouTube ↗
-                                    </Link>
-                                </li>
+                                {[
+                                    { name: "Instagram ↗", href: "https://instagram.com" },
+                                    { name: "LinkedIn ↗", href: "https://linkedin.com" },
+                                    { name: "YouTube ↗", href: "https://youtube.com" },
+                                ].map((item, idx) => (
+                                    <li key={idx} className={styles.linkMaskLine}>
+                                        <Link
+                                            href={item.href}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className={`${styles.externalLink} ${styles.linkMaskItem}`}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
 
                             <div className={styles.locationsGroup}>
-                                <span>Tucson—AZ</span>
-                                <span>Lenox—MA</span>
-                                <span>Woodside—CA</span>
+                                {["Tucson—AZ", "Lenox—MA", "Woodside—CA"].map((loc, idx) => (
+                                    <div key={idx} className={styles.locMaskLine}>
+                                        <span className={styles.locMaskItem}>{loc}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
                         <div className={`${styles.navCol} ${styles.legalCol}`}>
                             <ul className={styles.linkList}>
-                                <li><Link href="/">Terms of use</Link></li>
-                                <li><Link href="/">Privacy policy</Link></li>
-                                <li><Link href="/">Accessibility</Link></li>
+                                {["Terms of use", "Privacy policy", "Accessibility"].map((item, idx) => (
+                                    <li key={idx} className={styles.linkMaskLine}>
+                                        <Link href="/" className={styles.linkMaskItem}>
+                                            {item}
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                             <div className={styles.copyright}>
-                                <span>© 1979–2026</span>
+                                <div className={styles.copyMaskLine}>
+                                    <span className={styles.copyMaskItem}>© 1979–2026</span>
+                                </div>
                             </div>
                         </div>
                     </div>

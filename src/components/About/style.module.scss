@@ -1,13 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-// -------------------------------------------------------------
-// Variables & Mixins
-// -------------------------------------------------------------
 $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-$color-bg: #f8f6f0; // Warm editorial linen
-$color-text: #171615; // Deep graphite
-$color-text-muted: #79746e; // Mineral taupe
-$color-accent: #c4a482; // Warm desert gold
+$color-bg: #f7f7f7;
+$color-text: #171615;
+$color-text-muted: #79746e;
+$color-accent: #c4a482;
 $color-border: rgba(23, 22, 21, 0.1);
 $mobile-bp: 768px;
 $tablet-bp: 1024px;
@@ -18,9 +15,6 @@ $tablet-bp: 1024px;
   align-items: center;
 }
 
-// -------------------------------------------------------------
-// Component Styles
-// -------------------------------------------------------------
 .about {
   position: relative;
   width: 100vw;
@@ -38,9 +32,6 @@ $tablet-bp: 1024px;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
 }
 
-// -------------------------------------------------------------
-// Split-Text Word Mask Helpers
-// -------------------------------------------------------------
 .wordWrapper {
   display: inline-flex;
   overflow: hidden;
@@ -53,9 +44,6 @@ $tablet-bp: 1024px;
   }
 }
 
-// -------------------------------------------------------------
-// Header Section
-// -------------------------------------------------------------
 .header {
   margin-bottom: clamp(3rem, 7vw, 5.5rem);
 
@@ -90,9 +78,6 @@ $tablet-bp: 1024px;
   }
 }
 
-// -------------------------------------------------------------
-// Editorial Manifesto Block
-// -------------------------------------------------------------
 .manifestoWrapper {
   border-top: 1px solid $color-border;
   border-bottom: 1px solid $color-border;
@@ -115,9 +100,6 @@ $tablet-bp: 1024px;
   }
 }
 
-// -------------------------------------------------------------
-// Two-Column Story Layout
-// -------------------------------------------------------------
 .storySection {
   display: grid;
   grid-template-columns: 1fr 1.6fr;
@@ -229,9 +211,6 @@ $tablet-bp: 1024px;
   }
 }
 
-// -------------------------------------------------------------
-// Stats Grid
-// -------------------------------------------------------------
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -274,9 +253,6 @@ $tablet-bp: 1024px;
   }
 }
 
-// -------------------------------------------------------------
-// Footer Note / Quote
-// -------------------------------------------------------------
 .footerNote {
   text-align: center;
   max-width: 46ch;

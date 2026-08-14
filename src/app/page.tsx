@@ -12,6 +12,7 @@ import Des from "@/components/Des";
 import Brands from "@/components/Brands";
 import Footer from "@/components/Footer";
 import Products from "@/components/Products";
+import Methodology from "@/components/Methodology";
 
 export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -25,6 +26,7 @@ export default function Home() {
         <Destination />
         <Products />
         <Brands />
+        <Methodology />
         <Contact />
         <Footer />
     </div>

@@ -49,10 +49,10 @@ const stats = [
 ];
 
 function SplitTextReveal({
-                             text,
-                             className,
-                             tag = "p"
-                         }: {
+    text,
+    className,
+    tag = "p"
+}: {
     text: string;
     className?: string;
     tag?: "h1" | "h2" | "h3" | "p";
@@ -85,7 +85,6 @@ export default function About() {
             const container = aboutRef.current;
             if (!container) return;
 
-            // 1. Hero / Header Statement Reveal
             const headerWords = container.querySelectorAll(`.${styles.header} .reveal-word`);
             const subWords = container.querySelectorAll(`.${styles.subLabel} .reveal-word`);
 
@@ -121,7 +120,6 @@ export default function About() {
                 }
             );
 
-            // 2. Large Manifesto Reveal on Scroll Scrub
             const manifestoWords = manifestoRef.current?.querySelectorAll(".reveal-word");
             if (manifestoWords) {
                 gsap.fromTo(
@@ -142,7 +140,6 @@ export default function About() {
                 );
             }
 
-            // 3. Milestone Story Cards Fade & Slide-In
             const storyCards = storyListRef.current?.querySelectorAll(`.${styles.storyCard}`);
             if (storyCards) {
                 storyCards.forEach((card) => {
@@ -170,7 +167,6 @@ export default function About() {
                 });
             }
 
-            // 4. Stats Counter Reveal
             const statItems = statsRef.current?.querySelectorAll(`.${styles.statItem}`);
             if (statItems) {
                 gsap.fromTo(
@@ -196,7 +192,6 @@ export default function About() {
     return (
         <section className={styles.about} ref={aboutRef} id="about">
             <div className={styles.container}>
-                {/* Section Header */}
                 <header className={styles.header}>
                     <div className={styles.subLabel}>
                         <span className={styles.badgeDot} />
@@ -209,14 +204,12 @@ export default function About() {
                     />
                 </header>
 
-                {/* Editorial Manifesto Statement */}
                 <div className={styles.manifestoWrapper} ref={manifestoRef}>
                     <p className={styles.manifestoText}>
                         <span className={styles.manifestoLead}>The original trailblazer</span> of integrative wellness, Canyon Ranch began with one man’s pursuit of vitality before wellness was a household word. That pursuit has since transformed an industry and guided countless individuals to realize their highest state of longevity.
                     </p>
                 </div>
 
-                {/* Two-Column Story Journey */}
                 <div className={styles.storySection}>
                     <aside className={styles.stickyColumn}>
                         <span className={styles.stickyIndex}>01 / HERITAGE</span>
@@ -245,7 +238,6 @@ export default function About() {
                     </div>
                 </div>
 
-                {/* Minimal Stats Grid */}
                 <div className={styles.statsGrid} ref={statsRef}>
                     {stats.map((stat, idx) => (
                         <div key={idx} className={styles.statItem}>
@@ -255,7 +247,6 @@ export default function About() {
                     ))}
                 </div>
 
-                {/* Closing Horizon Quote */}
                 <footer className={styles.footerNote}>
                     <p className={styles.quote}>
                         “We continue to deliver new ways to well-being where you visit, stay, and live—never losing sight of personal transformation.”

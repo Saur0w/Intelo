@@ -4,10 +4,11 @@ import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/SplitText";
 import styles from "./style.module.scss";
 
 if (typeof window !== "undefined") {
-    gsap.registerPlugin(useGSAP);
+    gsap.registerPlugin(useGSAP, SplitText);
 }
 
 interface NavLink {
@@ -29,6 +30,7 @@ const navLinks: NavLink[] = [
 
 export default function Header({ isLoaded }: HeaderProps) {
     const headerRef = useRef<HTMLElement>(null);
+    const drawerRef = useRef<HTMLDivElement>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [theme, setTheme] = useState<"dark" | "light">("dark");
@@ -72,6 +74,7 @@ export default function Header({ isLoaded }: HeaderProps) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Desktop intro animation
     useGSAP(
         () => {
             const header = headerRef.current;
@@ -139,6 +142,134 @@ export default function Header({ isLoaded }: HeaderProps) {
         { scope: headerRef, dependencies: [isLoaded] }
     );
 
+    // Mobile drawer split text mask reveal animation
+    useGSAP(
+        () => {
+            const drawer = drawerRef.current;
+            if (!drawer) return;
+
+            const linkTexts = drawer.querySelectorAll(`.${styles.mText}`);
+            const linkIndices = drawer.querySelectorAll(`.${styles.mIndexInner}`);
+            const footerTagline = drawer.querySelector(`.${styles.mFooterText}`);
+            const footerBtn = drawer.querySelector(`.${styles.mobileReserveBtnInner}`);
+
+            if (linkTexts.length === 0) return;
+
+            const splitLinkTexts = new SplitText(linkTexts, {
+                type: "chars, words",
+                charsClass: styles.charInner,
+            });
+
+            let splitFooter: SplitText | null = null;
+            if (footerTagline) {
+                splitFooter = new SplitText(footerTagline, {
+                    type: "words, chars",
+                    charsClass: styles.charInner,
+                });
+            }
+
+            if (isMenuOpen) {
+                gsap.set(drawer, { autoAlpha: 1, yPercent: 0 });
+                gsap.set(splitLinkTexts.chars, { yPercent: 120, opacity: 0, rotateZ: 3 });
+                gsap.set(linkIndices, { yPercent: 110, opacity: 0 });
+                if (splitFooter) {
+                    gsap.set(splitFooter.chars, { yPercent: 120, opacity: 0 });
+                }
+                if (footerBtn) {
+                    gsap.set(footerBtn, { yPercent: 110, opacity: 0 });
+                }
+
+                const tl = gsap.timeline({
+                    defaults: { ease: "power4.out" },
+                });
+
+                tl.to(
+                    linkIndices,
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.75,
+                        stagger: 0.06,
+                    },
+                    0.15
+                )
+                    .to(
+                        splitLinkTexts.chars,
+                        {
+                            yPercent: 0,
+                            opacity: 1,
+                            rotateZ: 0,
+                            duration: 0.85,
+                            stagger: 0.015,
+                        },
+                        0.18
+                    );
+
+                if (splitFooter) {
+                    tl.to(
+                        splitFooter.chars,
+                        {
+                            yPercent: 0,
+                            opacity: 1,
+                            duration: 0.6,
+                            stagger: 0.01,
+                        },
+                        0.4
+                    );
+                }
+
+                if (footerBtn) {
+                    tl.to(
+                        footerBtn,
+                        {
+                            yPercent: 0,
+                            opacity: 1,
+                            duration: 0.7,
+                        },
+                        0.45
+                    );
+                }
+            } else {
+                gsap.to(splitLinkTexts.chars, {
+                    yPercent: -100,
+                    opacity: 0,
+                    duration: 0.3,
+                    stagger: 0.008,
+                    ease: "power3.in",
+                });
+                gsap.to([linkIndices, footerBtn], {
+                    yPercent: -100,
+                    opacity: 0,
+                    duration: 0.25,
+                    ease: "power3.in",
+                });
+                if (splitFooter) {
+                    gsap.to(splitFooter.chars, {
+                        yPercent: -100,
+                        opacity: 0,
+                        duration: 0.25,
+                        ease: "power3.in",
+                    });
+                }
+                gsap.to(drawer, {
+                    yPercent: -100,
+                    duration: 0.5,
+                    delay: 0.2,
+                    ease: "power4.inOut",
+                    onComplete: () => {
+                        gsap.set(drawer, { autoAlpha: 0 });
+                    },
+                });
+            }
+
+            return () => {
+                splitLinkTexts.revert();
+                if (splitFooter) splitFooter.revert();
+            };
+        },
+        { scope: headerRef, dependencies: [isMenuOpen] }
+    );
+
     return (
         <header
             className={`${styles.header} ${
@@ -196,30 +327,42 @@ export default function Header({ isLoaded }: HeaderProps) {
                 className={`${styles.mobileDrawer} ${
                     isMenuOpen ? styles.drawerOpen : ""
                 }`}
+                ref={drawerRef}
             >
                 <div className={styles.mobileLinks}>
                     {navLinks.map((link, index) => (
-                        <Link
-                            key={index}
-                            href={link.href}
-                            className={styles.mobileLink}
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            <span className={styles.mIndex}>0{index + 1}</span>
-                            <span className={styles.mText}>{link.label}</span>
-                        </Link>
+                        <div key={index} className={styles.mobileLinkWrapper}>
+                            <Link
+                                href={link.href}
+                                className={styles.mobileLink}
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <span className={styles.mIndexMask}>
+                                    <span className={styles.mIndexInner}>0{index + 1}</span>
+                                </span>
+                                <span className={styles.mTextMask}>
+                                    <span className={styles.mText}>{link.label}</span>
+                                </span>
+                            </Link>
+                        </div>
                     ))}
                 </div>
 
                 <div className={styles.mobileFooter}>
-                    <p>THE ARCHITECTURE OF WELL-BEING</p>
-                    <Link
-                        href="/reserve"
-                        className={styles.mobileReserveBtn}
-                        onClick={() => setIsMenuOpen(false)}
-                    >
-                        Book a Stay &rarr;
-                    </Link>
+                    <div className={styles.mFooterTextMask}>
+                        <p className={styles.mFooterText}>THE ARCHITECTURE OF WELL-BEING</p>
+                    </div>
+                    <div className={styles.mobileReserveBtnMask}>
+                        <Link
+                            href="/reserve"
+                            className={styles.mobileReserveBtn}
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            <span className={styles.mobileReserveBtnInner}>
+                                Book a Stay &rarr;
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </header>
