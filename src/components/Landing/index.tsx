@@ -23,6 +23,13 @@ const slides: SlideItem[] = [
         color: "#E8E2D5",
     },
     {
+        src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl78c60nco06l8xs20sewx",
+        alt: "Hot stone therapeutic massage",
+        title: "BODY & MIND RESTORATION",
+        subtitle: "Holistic treatments designed for longevity",
+        color: "#E5DDD8",
+    },
+    {
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmfld06mjrmei07k2qpwbq1i5",
         alt: "A woman holding a crystal",
         title: "THE #1 WELLNESS RESORT",
@@ -35,13 +42,6 @@ const slides: SlideItem[] = [
         title: "SOUND MEDITATION",
         subtitle: "Inner equilibrium & deep resonance",
         color: "#D9E3D8",
-    },
-    {
-        src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl78c60nco06l8xs20sewx",
-        alt: "Hot stone therapeutic massage",
-        title: "BODY & MIND RESTORATION",
-        subtitle: "Holistic treatments designed for longevity",
-        color: "#E5DDD8",
     },
     {
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl8jdd0vad06k3d59l3re1",
@@ -307,7 +307,7 @@ export default function Landing() {
     };
 
     return (
-        <section className={styles.landing} ref={landingRef}>
+        <section className={styles.landing} ref={landingRef} data-theme="dark">
             <div className={styles.slider}>
                 {slides.map((slide, index) => (
                     <div

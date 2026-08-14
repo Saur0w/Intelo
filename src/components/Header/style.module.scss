@@ -7,13 +7,126 @@
   width: 100vw;
   z-index: 999;
   font-family: "Syne", sans-serif;
-  color: #1a1816;
   padding: 2rem 3.5rem;
   box-sizing: border-box;
   transition: padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-  background-color 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+  background-color 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease,
+  color 0.35s ease;
   background-color: transparent;
   border-bottom: 1px solid transparent;
+
+  // Dark Theme (for dark backgrounds e.g. Landing hero)
+  &.themeDark:not(.isScrolled) {
+    color: #ffffff;
+
+    .brand {
+      .logo {
+        color: #ffffff;
+      }
+      .estDate {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+
+    .navDesktop .navLink {
+      color: #ffffff;
+
+      .linkIndex {
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .linkText::after {
+        background-color: #ffffff;
+      }
+
+      &:hover {
+        .linkIndex {
+          color: #e59866;
+        }
+      }
+    }
+
+    .rightActions {
+      .locationTime {
+        color: rgba(255, 255, 255, 0.8);
+
+        .dot {
+          color: #48bb78;
+        }
+      }
+
+      .reserveBtn {
+        background-color: #ffffff;
+        color: #1a1816;
+
+        &:hover {
+          background-color: #e59866;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .menuToggle span {
+      background-color: #ffffff;
+    }
+  }
+
+  // Light Theme (for light backgrounds / when scrolled)
+  &.themeLight,
+  &.isScrolled {
+    color: #1a1816;
+
+    .brand {
+      .logo {
+        color: #1a1816;
+      }
+      .estDate {
+        color: #8c827a;
+      }
+    }
+
+    .navDesktop .navLink {
+      color: #1a1816;
+
+      .linkIndex {
+        color: #8c827a;
+      }
+
+      .linkText::after {
+        background-color: #1a1816;
+      }
+
+      &:hover {
+        .linkIndex {
+          color: #a04825;
+        }
+      }
+    }
+
+    .rightActions {
+      .locationTime {
+        color: #5c554e;
+
+        .dot {
+          color: #3a5a40;
+        }
+      }
+
+      .reserveBtn {
+        background-color: #1a1816;
+        color: #faf8f5;
+
+        &:hover {
+          background-color: #a04825;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .menuToggle span {
+      background-color: #1a1816;
+    }
+  }
 
   &.isScrolled {
     padding: 1.1rem 3.5rem;
@@ -56,15 +169,15 @@
     font-weight: 800;
     letter-spacing: -0.035em;
     text-decoration: none;
-    color: #1a1816;
     text-transform: capitalize;
+    transition: color 0.35s ease;
   }
 
   .estDate {
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.12em;
-    color: #8c827a;
+    transition: color 0.35s ease;
   }
 }
 
@@ -83,18 +196,16 @@
     align-items: center;
     gap: 0.35rem;
     text-decoration: none;
-    color: #1a1816;
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.04em;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, color 0.35s ease;
 
     .linkIndex {
       font-size: 0.6rem;
       font-weight: 700;
-      color: #8c827a;
       opacity: 0.8;
-      transition: color 0.3s ease;
+      transition: color 0.35s ease;
     }
 
     .linkText {
@@ -107,18 +218,13 @@
         left: 0;
         width: 100%;
         height: 1px;
-        background-color: #1a1816;
         transform: scaleX(0);
         transform-origin: right;
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease;
       }
     }
 
     &:hover {
-      .linkIndex {
-        color: #a04825;
-      }
-
       .linkText::after {
         transform: scaleX(1);
         transform-origin: left;
@@ -139,12 +245,12 @@
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.14em;
-    color: #5c554e;
+    transition: color 0.35s ease;
 
     .dot {
       font-size: 0.5rem;
-      color: #3a5a40;
       animation: pulse 2.4s infinite;
+      transition: color 0.35s ease;
     }
 
     @media (max-width: 1100px) {
@@ -157,21 +263,18 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.65rem 1.35rem;
-    background-color: #1a1816;
-    color: #faf8f5;
     text-decoration: none;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.35s ease, color 0.35s ease, transform 0.3s ease;
 
     .arrow {
       transition: transform 0.3s ease;
     }
 
     &:hover {
-      background-color: #a04825;
       transform: translateY(-1px);
 
       .arrow {
@@ -201,11 +304,14 @@
     display: block;
     width: 100%;
     height: 1.5px;
-    background-color: #1a1816;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.35s ease;
   }
 
   &.open {
+    span {
+      background-color: #1a1816 !important;
+    }
+
     span:nth-child(1) {
       transform: translateY(3.5px) rotate(45deg);
     }

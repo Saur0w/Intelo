@@ -24,6 +24,7 @@ const navLinks: NavLink[] = [
 export default function Header() {
     const headerRef = useRef<HTMLElement>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [theme, setTheme] = useState<"dark" | "light">("dark");
     const [time, setTime] = useState("");
 
     useEffect(() => {
@@ -60,13 +61,32 @@ export default function Header() {
             );
 
             const handleScroll = () => {
-                if (window.scrollY > 40) {
+                const scrolled = window.scrollY > 40;
+                if (scrolled) {
                     header.classList.add(styles.isScrolled);
+                    header.classList.add(styles.themeLight);
+                    header.classList.remove(styles.themeDark);
+                    setTheme("light");
                 } else {
                     header.classList.remove(styles.isScrolled);
+                    // Check element beneath header
+                    const elem = document.elementFromPoint(window.innerWidth / 2, 50);
+                    const themedSection = elem?.closest("[data-theme]");
+                    const isDarkSection = themedSection ? themedSection.getAttribute("data-theme") === "dark" : true;
+
+                    if (isDarkSection) {
+                        header.classList.add(styles.themeDark);
+                        header.classList.remove(styles.themeLight);
+                        setTheme("dark");
+                    } else {
+                        header.classList.add(styles.themeLight);
+                        header.classList.remove(styles.themeDark);
+                        setTheme("light");
+                    }
                 }
             };
 
+            handleScroll();
             window.addEventListener("scroll", handleScroll, { passive: true });
             return () => window.removeEventListener("scroll", handleScroll);
         },
@@ -74,7 +94,10 @@ export default function Header() {
     );
 
     return (
-        <header className={styles.header} ref={headerRef}>
+        <header
+            className={`${styles.header} ${theme === "dark" ? styles.themeDark : styles.themeLight}`}
+            ref={headerRef}
+        >
             <div className={styles.container}>
                 <div className={styles.brand}>
                     <Link href="/" className={styles.logo}>
