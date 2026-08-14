@@ -61,19 +61,84 @@ export default function Landing() {
     const stackRef = useRef<HTMLDivElement>(null);
     const centerTextRef = useRef<HTMLParagraphElement>(null);
     const counterRef = useRef<HTMLSpanElement>(null);
+    const showcaseWrapperRef = useRef<HTMLDivElement>(null);
+    const captionTagRef = useRef<HTMLSpanElement>(null);
+    const captionTitleRef = useRef<HTMLSpanElement>(null);
+
     const [activeIndex, setActiveIndex] = useState<number>(0);
+    const activeIndexRef = useRef<number>(0);
     const [isSpread, setIsSpread] = useState<boolean>(false);
     const isSpreadRef = useRef<boolean>(false);
 
     const handleSelect = (index: number) => {
-        if (!isSpreadRef.current || index === activeIndex) return;
+        if (!isSpreadRef.current || index === activeIndexRef.current) return;
+        const prevIndex = activeIndexRef.current;
+        activeIndexRef.current = index;
         setActiveIndex(index);
 
-        gsap.fromTo(
-            `.${styles.showcaseImg}`,
-            { opacity: 0.4, scale: 1.04 },
-            { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
+        const wrapper = showcaseWrapperRef.current;
+        if (!wrapper) return;
+
+        const slides = wrapper.querySelectorAll<HTMLElement>(`.${styles.showcaseSlide}`);
+        const nextSlide = wrapper.querySelector<HTMLElement>(
+            `.${styles.showcaseSlide}[data-showcase-index="${index}"]`
         );
+        const prevSlide = wrapper.querySelector<HTMLElement>(
+            `.${styles.showcaseSlide}[data-showcase-index="${prevIndex}"]`
+        );
+
+        if (nextSlide) {
+            slides.forEach((s) => {
+                if (s !== nextSlide && s !== prevSlide) {
+                    gsap.set(s, { zIndex: 0 });
+                }
+            });
+
+            if (prevSlide) {
+                gsap.set(prevSlide, { zIndex: 1, clipPath: "inset(0% 0% 0% 0%)" });
+            }
+
+            gsap.set(nextSlide, { zIndex: 2 });
+            const nextImg = nextSlide.querySelector(`.${styles.showcaseImg}`);
+
+            gsap.fromTo(
+                nextSlide,
+                { clipPath: "inset(100% 0% 0% 0%)" },
+                {
+                    clipPath: "inset(0% 0% 0% 0%)",
+                    duration: 0.85,
+                    ease: "power4.out",
+                    onComplete: () => {
+                        if (prevSlide) {
+                            gsap.set(prevSlide, { zIndex: 0 });
+                        }
+                    },
+                }
+            );
+
+            if (nextImg) {
+                gsap.fromTo(
+                    nextImg,
+                    { scale: 1.15 },
+                    { scale: 1.0, duration: 0.85, ease: "power4.out" }
+                );
+            }
+        }
+
+        if (captionTitleRef.current) {
+            gsap.fromTo(
+                captionTitleRef.current,
+                { y: 15, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }
+            );
+        }
+        if (captionTagRef.current) {
+            gsap.fromTo(
+                captionTagRef.current,
+                { scale: 0.85, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }
+            );
+        }
     };
 
     useGSAP(
@@ -82,8 +147,11 @@ export default function Landing() {
             if (!cards.length || !stackRef.current || !centerTextRef.current) return;
 
             const splitText = new SplitText(centerTextRef.current, {
-                type: "words,lines",
+                type: "lines,words",
+                linesClass: styles.splitLine,
+                wordsClass: styles.splitWord,
             });
+            gsap.set(splitText.lines, { overflow: "hidden" });
 
             const masterTl = gsap.timeline({ delay: 0.2 });
 
@@ -125,7 +193,7 @@ export default function Landing() {
                         isSpreadRef.current = true;
                         setIsSpread(true);
 
-                        // Reveal text, layout info & showcase image
+                        // Reveal column layouts
                         gsap.to(
                             [
                                 `.${styles.featuredLabel}`,
@@ -136,22 +204,62 @@ export default function Landing() {
                                 opacity: 1,
                                 y: 0,
                                 duration: 0.7,
-                                stagger: 0.08,
+                                stagger: 0.06,
                                 ease: "power3.out",
                             }
                         );
 
+                        // SplitText luxury line mask reveal
                         gsap.fromTo(
                             splitText.words,
-                            { y: 15, opacity: 0 },
                             {
-                                y: 0,
+                                yPercent: 120,
+                                opacity: 0,
+                                rotateZ: 2.5,
+                            },
+                            {
+                                yPercent: 0,
                                 opacity: 1,
-                                duration: 0.5,
-                                stagger: 0.015,
-                                ease: "power2.out",
+                                rotateZ: 0,
+                                duration: 1.1,
+                                stagger: 0.02,
+                                ease: "power4.out",
                             }
                         );
+
+                        // Center column meta details
+                        gsap.to(`.${styles.metaBlock}`, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.7,
+                            stagger: 0.08,
+                            ease: "power3.out",
+                            delay: 0.15,
+                        });
+
+                        // Right column showcase cinematic clip-path reveal
+                        if (showcaseWrapperRef.current) {
+                            gsap.fromTo(
+                                showcaseWrapperRef.current,
+                                { clipPath: "inset(100% 0% 0% 0%)" },
+                                {
+                                    clipPath: "inset(0% 0% 0% 0%)",
+                                    duration: 1.3,
+                                    ease: "power4.inOut",
+                                }
+                            );
+
+                            const firstImg = showcaseWrapperRef.current.querySelector(
+                                `.${styles.showcaseSlide}[data-showcase-index="0"] .${styles.showcaseImg}`
+                            );
+                            if (firstImg) {
+                                gsap.fromTo(
+                                    firstImg,
+                                    { scale: 1.25 },
+                                    { scale: 1.0, duration: 1.3, ease: "power4.inOut" }
+                                );
+                            }
+                        }
                     },
                 });
             }, "+=0.2");
@@ -235,21 +343,34 @@ export default function Landing() {
 
                 {/* Right Column: Active Showcase */}
                 <div className={styles.rightCol}>
-                    <div className={styles.showcaseWrapper}>
-                        <Image
-                            src={items[activeIndex].src}
-                            alt={items[activeIndex].alt}
-                            fill
-                            unoptimized
-                            priority
-                            className={styles.showcaseImg}
-                        />
+                    <div className={styles.showcaseWrapper} ref={showcaseWrapperRef}>
+                        {items.map((item, index) => (
+                            <div
+                                key={index}
+                                data-showcase-index={index}
+                                className={styles.showcaseSlide}
+                                style={{
+                                    zIndex: index === 0 ? 1 : 0,
+                                }}
+                            >
+                                <Image
+                                    src={item.src}
+                                    alt={item.alt}
+                                    fill
+                                    unoptimized
+                                    priority={index === 0}
+                                    className={styles.showcaseImg}
+                                />
+                            </div>
+                        ))}
                     </div>
                     <div className={styles.showcaseCaption}>
-                        <span className={styles.captionTag}>[ 0{activeIndex + 1} ]</span>
-                        <span className={styles.captionTitle}>
-              {items[activeIndex].title}
-            </span>
+                        <span className={styles.captionTag} ref={captionTagRef}>
+                            [ 0{activeIndex + 1} ]
+                        </span>
+                        <span className={styles.captionTitle} ref={captionTitleRef}>
+                            {items[activeIndex].title}
+                        </span>
                     </div>
                 </div>
             </div>
