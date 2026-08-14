@@ -1,0 +1,674 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
+$font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+$bg-color: #f7f7f7;
+$card-fill: #ffffff;
+$text-color: #171615;
+$muted-color: #79746e;
+$gold-accent: #c4a482;
+$border-light: rgba(23, 22, 21, 0.08);
+$border-focus: rgba(196, 164, 130, 0.45);
+
+$mobile-bp: 768px;
+$tablet-bp: 1080px;
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.productsSection {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: $bg-color;
+  color: $text-color;
+  font-family: $font-main;
+  padding: clamp(5rem, 10vw, 9.5rem) 0;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1420px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 4.5rem);
+}
+
+.wordMask {
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+}
+
+.charInner {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: 0 100%;
+}
+
+.header {
+  margin-bottom: clamp(3rem, 6.5vw, 5.5rem);
+
+  .topMeta {
+    @include flex-between;
+    margin-bottom: 1.5rem;
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: clamp(0.7rem, 1.1vw, 0.8rem);
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: $muted-color;
+
+      .pulseDot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: $gold-accent;
+      }
+    }
+
+    .batchTag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: $muted-color;
+      opacity: 0.75;
+
+      @media (max-width: $mobile-bp) {
+        display: none;
+      }
+    }
+  }
+
+  .headlineRow {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: end;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+
+    @media (max-width: $tablet-bp) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .mainTitle {
+      font-size: clamp(2.4rem, 5.8vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: $text-color;
+      margin: 0;
+    }
+
+    .storyLead {
+      font-size: clamp(0.95rem, 1.25vw, 1.12rem);
+      font-weight: 400;
+      line-height: 1.7;
+      color: $muted-color;
+      margin: 0;
+      max-width: 42ch;
+    }
+  }
+}
+
+.controlsBar {
+  @include flex-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid $border-light;
+  padding-bottom: 1.5rem;
+
+  .categoryNav {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+
+    .filterBtn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.55rem 1.15rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: $muted-color;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+      .countBadge {
+        font-size: 0.68rem;
+        opacity: 0.7;
+        font-variant-numeric: tabular-nums;
+      }
+
+      &:hover {
+        color: $text-color;
+        background: rgba(255, 255, 255, 0.4);
+      }
+
+      &.activeFilter {
+        color: $text-color;
+        font-weight: 600;
+        background: $card-fill;
+        border-color: $border-light;
+        box-shadow: 0 4px 18px rgba(23, 22, 21, 0.05);
+      }
+    }
+  }
+
+  .layoutSwitcher {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+
+    .switchLabel {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: $muted-color;
+    }
+
+    .switchButtons {
+      display: inline-flex;
+      background: rgba(23, 22, 21, 0.05);
+      padding: 3px;
+      border-radius: 9999px;
+
+      .viewBtn {
+        background: transparent;
+        border: none;
+        padding: 0.4rem 0.95rem;
+        border-radius: 9999px;
+        font-size: 0.76rem;
+        font-weight: 500;
+        color: $muted-color;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &.activeView {
+          background: #ffffff;
+          color: $text-color;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+      }
+    }
+  }
+}
+
+.productGrid {
+  display: grid;
+  gap: clamp(1.75rem, 3.5vw, 3rem);
+  margin-bottom: clamp(4.5rem, 8.5vw, 8rem);
+  transition: all 0.5s ease;
+
+  &.editorialView {
+    grid-template-columns: repeat(12, 1fr);
+
+    .productCard:nth-child(6n + 1) {
+      grid-column: span 7;
+      .imageContainer {
+        aspect-ratio: 16 / 11;
+      }
+    }
+
+    .productCard:nth-child(6n + 2) {
+      grid-column: span 5;
+      .imageContainer {
+        aspect-ratio: 4 / 4.8;
+      }
+    }
+
+    .productCard:nth-child(6n + 3) {
+      grid-column: span 4;
+      .imageContainer {
+        aspect-ratio: 4 / 5.2;
+      }
+    }
+
+    .productCard:nth-child(6n + 4) {
+      grid-column: span 4;
+      .imageContainer {
+        aspect-ratio: 4 / 5.2;
+      }
+    }
+
+    .productCard:nth-child(6n + 5) {
+      grid-column: span 4;
+      .imageContainer {
+        aspect-ratio: 4 / 5.2;
+      }
+    }
+
+    .productCard:nth-child(6n + 6) {
+      grid-column: span 12;
+      .imageContainer {
+        aspect-ratio: 21 / 9;
+      }
+    }
+
+    @media (max-width: $tablet-bp) {
+      .productCard:nth-child(n) {
+        grid-column: span 6;
+        .imageContainer {
+          aspect-ratio: 4 / 4.5;
+        }
+      }
+    }
+
+    @media (max-width: $mobile-bp) {
+      .productCard:nth-child(n) {
+        grid-column: span 12;
+      }
+    }
+  }
+
+  &.gridView {
+    grid-template-columns: repeat(3, 1fr);
+
+    .productCard {
+      .imageContainer {
+        aspect-ratio: 4 / 4.8;
+      }
+    }
+
+    @media (max-width: $tablet-bp) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $mobile-bp) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.productCard {
+  position: relative;
+  will-change: transform, opacity;
+  cursor: pointer;
+
+  .cardInner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .imageContainer {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #e5dfd3;
+    margin-bottom: 1.25rem;
+    will-change: transform, width, height;
+
+    .cardImg {
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    .imageHeader {
+      @include flex-between;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      z-index: 2;
+      pointer-events: none;
+
+      .itemIndex {
+        padding: 0.3rem 0.65rem;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(8px);
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: $text-color;
+        letter-spacing: 0.08em;
+      }
+
+      .itemCategory {
+        padding: 0.3rem 0.75rem;
+        border-radius: 9999px;
+        background: rgba(23, 22, 21, 0.65);
+        backdrop-filter: blur(8px);
+        font-size: 0.68rem;
+        font-weight: 500;
+        color: #ffffff;
+        letter-spacing: 0.04em;
+      }
+    }
+
+    .hoverOverlay {
+      @include absolute-fill;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(23, 22, 21, 0.3);
+      opacity: 0;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 3;
+
+      .inspectBtn {
+        padding: 0.65rem 1.35rem;
+        background: #ffffff;
+        color: $text-color;
+        border-radius: 9999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        transform: translateY(10px) scale(0.95);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+    }
+  }
+
+  .cardDetails {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .titlePriceRow {
+      @include flex-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.45rem;
+
+      .cardTitle {
+        font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: $text-color;
+        margin: 0;
+      }
+
+      .cardPrice {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: $gold-accent;
+        white-space: nowrap;
+      }
+    }
+
+    .ritualNotes {
+      font-size: 0.82rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: $muted-color;
+      margin: 0 0 1rem 0;
+    }
+
+    .originFooter {
+      @include flex-between;
+      border-top: 1px solid $border-light;
+      padding-top: 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: $muted-color;
+      margin-top: auto;
+
+      .viewLink {
+        color: $text-color;
+        opacity: 0;
+        transform: translateX(-6px);
+        transition: all 0.35s ease;
+      }
+    }
+  }
+
+  &:hover {
+    .imageContainer {
+      .cardImg {
+        transform: scale(1.06);
+      }
+
+      .hoverOverlay {
+        opacity: 1;
+        .inspectBtn {
+          transform: translateY(0) scale(1);
+        }
+      }
+    }
+
+    .cardDetails .originFooter .viewLink {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.spotlightInspection {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 3rem);
+
+  .spotlightBackdrop {
+    @include absolute-fill;
+    background: rgba(12, 12, 12, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .spotlightModal {
+    position: relative;
+    width: 100%;
+    max-width: 980px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+    z-index: 2;
+
+    .closeBtn {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(23, 22, 21, 0.08);
+      border: none;
+      color: $text-color;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background-color 0.25s ease;
+
+      &:hover {
+        background: rgba(23, 22, 21, 0.18);
+      }
+    }
+
+    .spotlightGrid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+
+      @media (max-width: $mobile-bp) {
+        grid-template-columns: 1fr;
+      }
+
+      .spotlightMedia {
+        position: relative;
+        aspect-ratio: 4 / 5;
+        background-color: #e5dfd3;
+
+        .spotlightImg {
+          object-fit: cover;
+        }
+      }
+
+      .spotlightBody {
+        padding: clamp(2rem, 4vw, 3.5rem);
+        display: flex;
+        flex-direction: column;
+
+        .spotlightCategory {
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: $gold-accent;
+          margin-bottom: 0.75rem;
+        }
+
+        .spotlightTitle {
+          font-size: clamp(1.4rem, 2.4vw, 2rem);
+          font-weight: 400;
+          line-height: 1.15;
+          letter-spacing: -0.02em;
+          color: $text-color;
+          margin: 0 0 0.5rem 0;
+        }
+
+        .spotlightPrice {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: $text-color;
+          margin-bottom: 1.5rem;
+        }
+
+        .spotlightDivider {
+          width: 100%;
+          height: 1px;
+          background-color: $border-light;
+          margin-bottom: 1.5rem;
+        }
+
+        .detailSection {
+          margin-bottom: 1.25rem;
+
+          h4 {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: $text-color;
+            margin: 0 0 0.35rem 0;
+          }
+
+          p {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: $muted-color;
+            margin: 0;
+          }
+        }
+
+        .spotlightAction {
+          margin-top: auto;
+          padding: 0.9rem 1.6rem;
+          background: $text-color;
+          color: #ffffff;
+          border-radius: 9999px;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.88rem;
+          font-weight: 500;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background: lighten($text-color, 12%);
+          }
+        }
+      }
+    }
+  }
+}
+
+.apothecaryFooter {
+  .footerRule {
+    width: 100%;
+    height: 1px;
+    background-color: $border-light;
+    margin-bottom: 2.25rem;
+  }
+
+  .footerRow {
+    @include flex-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+
+    .guaranteeTag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $muted-color;
+
+      .guaranteeDot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: $gold-accent;
+      }
+    }
+
+    .allCatalogLink {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: $text-color;
+      padding: 0.75rem 1.6rem;
+      border: 1px solid $border-light;
+      border-radius: 9999px;
+      background: $card-fill;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+      .arrowIcon {
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        background: $text-color;
+        color: #ffffff;
+        border-color: $text-color;
+
+        .arrowIcon {
+          transform: translateX(4px);
+        }
+      }
+    }
+  }
+}
