@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f7eee9;
+  z-index: 999999;
+  @include flex-center;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  will-change: transform;
+
+  .headingWrapper {
+    @include flex-center;
+    overflow: hidden;
+    padding: 0.5rem 0;
+
+    .heading {
+      color: #0d0d0d;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 350;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin: 0;
+      user-select: none;
+      will-change: transform, opacity;
+    }
+  }
+
+  .counter {
+    position: absolute;
+    top: 50%;
+    right: clamp(2rem, 6vw, 6rem);
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    color: #0d0d0d;
+    user-select: none;
+    will-change: transform, opacity;
+
+    .label {
+      font-size: clamp(1rem, 1.4vw, 1.35rem);
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.65;
+      margin: 0;
+    }
+
+    .number {
+      font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+      font-style: italic;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      min-width: 3.5ch;
+      margin: 0;
+    }
+  }
+}

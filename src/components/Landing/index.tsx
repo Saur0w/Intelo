@@ -23,6 +23,13 @@ const slides: SlideItem[] = [
         color: "#E8E2D5",
     },
     {
+        src: "/texture/2.jpg",
+        alt: "Skin Care",
+        title: "SKIN CARE",
+        subtitle: "Personalized care for skin health",
+        color: "#E8E2D5",
+    },
+    {
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazl78c60nco06l8xs20sewx",
         alt: "Hot stone therapeutic massage",
         title: "BODY & MIND RESTORATION",
@@ -105,6 +112,9 @@ export default function Landing() {
                 return;
             }
 
+            setCurrentIndex(nextIdx);
+            prevIndexRef.current = nextIdx;
+
             const incomingImage = incomingSlide.querySelector(`.${styles.imageInner}`);
             const outgoingImage = outgoingSlide.querySelector(`.${styles.imageInner}`);
             
@@ -151,8 +161,6 @@ export default function Landing() {
                 onComplete: () => {
                     gsap.set(outgoingSlide, { zIndex: 1, autoAlpha: 0 });
                     gsap.set(incomingSlide, { zIndex: 3 });
-                    prevIndexRef.current = nextIdx;
-                    setCurrentIndex(nextIdx);
                     isAnimatingRef.current = false;
                 },
             });
@@ -343,7 +351,6 @@ export default function Landing() {
                     onClick={handlePrev}
                 >
                     <span className={styles.icon}>+</span>
-                    <span className={styles.label}>Prev</span>
                 </button>
 
                 <button
@@ -352,7 +359,6 @@ export default function Landing() {
                     className={`${styles.navBtn} ${styles.next}`}
                     onClick={handleNext}
                 >
-                    <span className={styles.label}>Next</span>
                     <span className={styles.icon}>+</span>
                 </button>
 

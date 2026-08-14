@@ -124,7 +124,7 @@
             .charInner {
               display: inline-block;
               will-change: transform, opacity;
-              transform-origin: 0% 100%;
+              transform-origin: 0 100%;
             }
           }
         }
@@ -144,13 +144,12 @@
     transform: translateY(-50%);
     pointer-events: auto;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.08);
+    background: transparent;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: none;
     color: #ffffff;
     padding: 0.85rem 1.4rem;
-    border-radius: 9999px;
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
@@ -172,9 +171,6 @@
     }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.95);
-      color: #0c0c0c;
-      border-color: rgba(255, 255, 255, 0.95);
       transform: translateY(-50%) scale(1.05);
 
       .icon {

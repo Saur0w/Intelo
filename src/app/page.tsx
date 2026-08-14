@@ -11,10 +11,14 @@ import Shops from "@/components/Shops";
 import Legacy from "@/components/Legacy";
 import Ranch from "@/components/Ranch";
 import Contact from "@/components/Get";
+import Preloader from "@/components/Preloader";
+import { useState } from "react";
 
 export default function Home() {
+    const [isLoaded, setIsLoaded] = useState(false);
   return (
     <div className={styles.page}>
+        <Preloader onComplete={isLoaded ? () => {} : () => setIsLoaded(true)} />
         <Landing />
         <Destination />
         <Ranch />
