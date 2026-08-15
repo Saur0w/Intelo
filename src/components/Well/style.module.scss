@@ -3,7 +3,7 @@
 $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 $font-mono: 'JetBrains Mono', monospace;
 
-$bg-color: #faf8f5;
+$bg-color: #f7f7f7;
 $text-primary: #0d0d0d;
 $text-muted: #79746e;
 $accent-gold: #c4a482;
@@ -37,7 +37,6 @@ $mobile-bp: 768px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-top: 1px solid $border-color;
   overflow: hidden;
 }
 
