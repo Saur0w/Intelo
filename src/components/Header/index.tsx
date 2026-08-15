@@ -73,8 +73,7 @@ export default function Header({ isLoaded }: HeaderProps) {
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-
-    // Desktop intro animation
+    
     useGSAP(
         () => {
             const header = headerRef.current;
@@ -142,7 +141,6 @@ export default function Header({ isLoaded }: HeaderProps) {
         { scope: headerRef, dependencies: [isLoaded] }
     );
 
-    // Mobile drawer split text mask reveal animation
     useGSAP(
         () => {
             const drawer = drawerRef.current;
@@ -354,7 +352,7 @@ export default function Header({ isLoaded }: HeaderProps) {
                     </div>
                     <div className={styles.mobileReserveBtnMask}>
                         <Link
-                            href="/reserve"
+                            href="/"
                             className={styles.mobileReserveBtn}
                             onClick={() => setIsMenuOpen(false)}
                         >
