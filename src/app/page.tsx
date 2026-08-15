@@ -2,7 +2,6 @@
 
 import styles from "./page.module.css";
 import Landing from "@/components/Landing";
-import Destination from "@/components/Destination";
 import Contact from "@/components/Get";
 import Preloader from "@/components/Preloader";
 import { useState } from "react";
@@ -13,6 +12,7 @@ import Brands from "@/components/Brands";
 import Footer from "@/components/Footer";
 import Products from "@/components/Products";
 import Methodology from "@/components/Methodology";
+import Study from "@/components/Study";
 
 export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -23,7 +23,7 @@ export default function Home() {
         <Landing isLoaded={isLoaded} />
         <Des />
         <About />
-        <Destination />
+        <Study />
         <Products />
         <Brands />
         <Methodology />
