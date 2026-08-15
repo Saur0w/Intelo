@@ -73,7 +73,7 @@ export default function Header({ isLoaded }: HeaderProps) {
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-    
+
     useGSAP(
         () => {
             const header = headerRef.current;
