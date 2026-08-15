@@ -18,13 +18,16 @@ if (typeof window !== "undefined") {
 export interface ShopItem {
     id: string;
     indexStr: string;
+    sku: string;
     src: string;
     alt: string;
     title: string;
     category: "rituals" | "living" | "curations";
     categoryLabel: string;
+    volume: string;
     origin: string;
     ritualNotes: string;
+    ingredients: string;
     price: string;
     href: string;
 }
@@ -33,97 +36,116 @@ const shopItems: ShopItem[] = [
     {
         id: "skin-care",
         indexStr: "01",
+        sku: "CR-SKN-019",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/cmazp299b3yz507k4lkg4if5s",
-        alt: "Woman using botanical face roller",
+        alt: "Botanical Sculpt & Mineral Elixir",
         title: "Botanical Sculpt & Mineral Elixir",
         category: "rituals",
         categoryLabel: "Facial Care",
-        origin: "Sonoran Desert Sanctuary",
-        ritualNotes: "Prickly Pear Seed • Cold-Pressed Jojoba • Rose Quartz",
+        volume: "50 ML / 1.7 FL. OZ.",
+        origin: "Tucson Sanctuary Studio",
+        ritualNotes: "Cold-pressed Sonoran jojoba, prickly pear seed, wild desert sage, rose quartz infusion.",
+        ingredients: "Simmondsia Chinensis Seed Oil, Opuntia Ficus-Indica Seed Oil, Salvia Apiana Oil, Quartz Extract.",
         price: "$120",
         href: "#skin-care",
     },
     {
         id: "spa-collection",
         indexStr: "02",
+        sku: "CR-SPA-044",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/cmazp549a41ph07k473m14zze",
-        alt: "CR Spa Collection products",
+        alt: "Thermal Bath Soak & Cedar Mist",
         title: "Thermal Bath Soak & Cedar Mist",
         category: "rituals",
         categoryLabel: "Hydrotherapy",
+        volume: "300 G / 10.5 OZ.",
         origin: "Lenox Berkshire Springs",
-        ritualNotes: "Epsom Crystals • Wild Mountain Sage • Pine Needle",
+        ritualNotes: "Purifying Epsom salt crystals, wild mountain cedar, crushed pine needle, bergamot rind.",
+        ingredients: "Magnesium Sulfate, Cedrus Atlantica Wood Oil, Pinus Sylvestris Leaf Extract, Citrus Aurantium Peel Oil.",
         price: "$85",
         href: "#spa-collection",
     },
     {
         id: "apparel",
         indexStr: "03",
+        sku: "CR-LIV-102",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/cmazp71vn3p3f06l81iwtf2b8",
-        alt: "Man wearing Canyon Ranch apparel on court",
+        alt: "Organic Linen Sanctuary Tunic",
         title: "Organic Linen Sanctuary Tunic",
         category: "living",
         categoryLabel: "Sanctuary Wear",
+        volume: "Sizes: S • M • L • XL",
         origin: "Woodside Forest Atelier",
-        ritualNotes: "100% Unbleached Flax • Natural Indigo Dye",
+        ritualNotes: "100% unbleached Belgian flax linen, garment-dyed in small batches with natural plant indigo.",
+        ingredients: "100% Pure Organic Linen, Horn Button Accents, Organic Cotton Stitching.",
         price: "$165",
         href: "#apparel",
     },
     {
         id: "gift-cards",
         indexStr: "04",
+        sku: "CR-CUR-001",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/cmazp0wcs3k7606l8jdao8exa",
-        alt: "Sanctuary Gift Cards",
+        alt: "Sanctuary Gift Passport",
         title: "Immersive Sanctuary Passport",
         category: "curations",
         categoryLabel: "Gifting & Journey",
-        origin: "All 4 Global Destinations",
-        ritualNotes: "Custom Calligraphy • Hand-Poured Wax Seal",
+        volume: "Universal Sanctuary Access",
+        origin: "Global Destinations",
+        ritualNotes: "Hand-embossed textured parchment, custom copperplate calligraphy, beeswax seal presentation.",
+        ingredients: "Archival Cotton Paper, Pure Beeswax, Brass Certificate Medallion.",
         price: "From $250",
         href: "#gift-cards",
     },
     {
         id: "best-sellers",
         indexStr: "05",
+        sku: "CR-LIV-088",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/cmazpavv241ut07k3zfntb775",
-        alt: "Woman with Canyon Ranch tote bag",
+        alt: "Heritage Canvas Carryall",
         title: "Sanctuary Heritage Canvas Carryall",
         category: "living",
         categoryLabel: "Living Objects",
+        volume: "Capacity: 28 Liters",
         origin: "Tucson Sanctuary Studio",
-        ritualNotes: "Heavyweight Organic Cotton • Brass Hardware",
+        ritualNotes: "Heavyweight 18oz organic cotton canvas, solid brass hardware, vegetable-tanned bridle leather trim.",
+        ingredients: "100% Organic Heavy Canvas, Italian Vegetable Leather, Antiqued Solid Brass.",
         price: "$140",
         href: "#best-sellers",
     },
     {
         id: "shop-all",
         indexStr: "06",
+        sku: "CR-CUR-012",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/cmazpaj3d3qu206l8s61l0eg6",
-        alt: "Skincare bottles on a vanity",
-        title: "The Complete Longevity Dispensary",
+        alt: "Complete Longevity Dispensary",
+        title: "Complete Longevity Dispensary",
         category: "curations",
         categoryLabel: "The Apothecary",
+        volume: "12-Piece Full Suite",
         origin: "Clinical Wellness Lab",
-        ritualNotes: "Integrative Formulations • Full 12-Piece Suite",
+        ritualNotes: "The definitive collection of cellular formulas, body elixirs, and restorative ritual objects.",
+        ingredients: "Full 12-Piece Formulations suite in custom matte black archival presentation chest.",
         price: "$480",
         href: "#shop-all",
     },
 ];
 
 const categories = [
-    { key: "all", label: "All Formulations" },
-    { key: "rituals", label: "Care & Rituals" },
-    { key: "living", label: "Sanctuary Living" },
-    { key: "curations", label: "Curations & Gifts" },
+    { key: "all", label: "ALL OBJECTS", count: 6 },
+    { key: "rituals", label: "CARE & RITUALS", count: 2 },
+    { key: "living", label: "SANCTUARY LIVING", count: 2 },
+    { key: "curations", label: "GIFTS & ARCHIVE", count: 2 },
 ] as const;
 
 type CategoryType = (typeof categories)[number]["key"];
-type LayoutMode = "editorial" | "grid";
+type LayoutMode = "editorial" | "archive";
 
 export default function Products() {
     const sectionRef = useRef<HTMLElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
+    const leadRef = useRef<HTMLParagraphElement>(null);
 
     const [activeCategory, setActiveCategory] = useState<CategoryType>("all");
     const [layoutMode, setLayoutMode] = useState<LayoutMode>("editorial");
@@ -151,23 +173,23 @@ export default function Products() {
 
             Flip.from(state, {
                 targets: updatedCards,
-                duration: 0.9,
-                ease: "luxuryFlip",
-                stagger: 0.04,
+                duration: 0.85,
+                ease: "fashionEase",
+                stagger: 0.03,
                 scale: true,
                 fade: true,
                 absolute: false,
                 onEnter: (elements) =>
                     gsap.fromTo(
                         elements,
-                        { opacity: 0, scale: 0.88, y: 35 },
-                        { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: "luxuryEase" }
+                        { opacity: 0, scale: 0.92, y: 30 },
+                        { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "fashionEase" }
                     ),
                 onLeave: (elements) =>
                     gsap.to(elements, {
                         opacity: 0,
-                        scale: 0.85,
-                        duration: 0.35,
+                        scale: 0.92,
+                        duration: 0.3,
                         ease: "power2.in",
                     }),
             });
@@ -192,9 +214,9 @@ export default function Products() {
 
             Flip.from(state, {
                 targets: updatedTargets,
-                duration: 1.1,
-                ease: "luxuryFlip",
-                stagger: 0.03,
+                duration: 1.0,
+                ease: "fashionEase",
+                stagger: 0.02,
                 scale: true,
                 nested: true,
                 prune: true,
@@ -210,26 +232,25 @@ export default function Products() {
             const container = sectionRef.current;
             if (!container) return;
 
-            CustomEase.create("luxuryEase", "0.19, 1, 0.22, 1");
-            CustomEase.create("luxuryFlip", "0.25, 1, 0.3, 1");
+            CustomEase.create("fashionEase", "0.22, 1, 0.36, 1");
+            CustomEase.create("maskEase", "0.77, 0, 0.175, 1");
 
             if (titleRef.current) {
-                const split = new SplitText(titleRef.current, {
+                const splitTitle = new SplitText(titleRef.current, {
                     type: "words,chars",
-                    wordsClass: styles.wordMask,
                     charsClass: styles.charInner,
+                    wordsClass: styles.wordMask,
                 });
 
                 gsap.fromTo(
-                    split.chars,
-                    { yPercent: 130, opacity: 0, rotateZ: 4 },
+                    splitTitle.chars,
+                    { yPercent: 120, opacity: 0 },
                     {
                         yPercent: 0,
                         opacity: 1,
-                        rotateZ: 0,
                         duration: 1.1,
                         stagger: 0.015,
-                        ease: "luxuryEase",
+                        ease: "fashionEase",
                         scrollTrigger: {
                             trigger: titleRef.current,
                             start: "top 85%",
@@ -238,22 +259,78 @@ export default function Products() {
                 );
             }
 
-            const cards = container.querySelectorAll(`.${styles.productCard}`);
-            gsap.fromTo(
-                cards,
-                { y: 50, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    stagger: 0.08,
-                    ease: "luxuryEase",
+            if (leadRef.current) {
+                const splitLead = new SplitText(leadRef.current, {
+                    type: "lines",
+                    linesClass: styles.lineMask,
+                });
+
+                gsap.fromTo(
+                    splitLead.lines,
+                    { yPercent: 110, opacity: 0 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.9,
+                        stagger: 0.04,
+                        ease: "fashionEase",
+                        scrollTrigger: {
+                            trigger: leadRef.current,
+                            start: "top 85%",
+                        },
+                    }
+                );
+            }
+
+            const cards = container.querySelectorAll<HTMLElement>(`.${styles.productCard}`);
+
+            cards.forEach((card) => {
+                const imgContainer = card.querySelector<HTMLElement>(`.${styles.imageContainer}`);
+                const imgInner = card.querySelector<HTMLElement>(`.${styles.cardImg}`);
+                const cardDetails = card.querySelector<HTMLElement>(`.${styles.cardDetails}`);
+
+                if (!imgContainer || !imgInner) return;
+
+                const cardTl = gsap.timeline({
                     scrollTrigger: {
-                        trigger: gridRef.current,
-                        start: "top 78%",
+                        trigger: card,
+                        start: "top 84%",
+                        toggleActions: "play none none reverse",
                     },
-                }
-            );
+                });
+
+                cardTl
+                    .fromTo(
+                        imgContainer,
+                        { clipPath: "inset(100% 0% 0% 0%)" },
+                        {
+                            clipPath: "inset(0% 0% 0% 0%)",
+                            duration: 1.25,
+                            ease: "maskEase",
+                        }
+                    )
+                    .fromTo(
+                        imgInner,
+                        { scale: 1.25 },
+                        {
+                            scale: 1,
+                            duration: 1.35,
+                            ease: "fashionEase",
+                        },
+                        0
+                    )
+                    .fromTo(
+                        cardDetails,
+                        { opacity: 0, y: 20 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.8,
+                            ease: "fashionEase",
+                        },
+                        "-=0.6"
+                    );
+            });
         },
         { scope: sectionRef }
     );
@@ -262,70 +339,56 @@ export default function Products() {
         <section className={styles.productsSection} ref={sectionRef} id="apothecary">
             <div className={styles.container}>
                 <header className={styles.header}>
-                    <div className={styles.topMeta}>
-                        <div className={styles.badge}>
-                            <span className={styles.pulseDot} />
-                            <span>THE APOTHECARY & DISPENSARY</span>
-                        </div>
-                        <span className={styles.batchTag}>ORIGIN NO. 1979 • PURE BOTANICAL</span>
+                    <div className={styles.topIndexRow}>
+                        <span className={styles.sectionIndex}>[ SECTION 04 / DISPENSARY ]</span>
+                        <span className={styles.editionTag}>COLLECTION 2026 • BOTANICAL LAB</span>
                     </div>
 
-                    <div className={styles.headlineRow}>
+                    <div className={styles.titleGrid}>
                         <h2 ref={titleRef} className={styles.mainTitle}>
-                            Formulated for Longevity
+                            Formulated for Longevity.
                         </h2>
-
-                        <div className={styles.storyBlock}>
-                            <p className={styles.storyLead}>
-                                Integrative remedies formulated alongside clinical physicians and
-                                holistic herbalists across our four desert and forest havens.
+                        <div className={styles.leadBlock}>
+                            <p ref={leadRef} className={styles.leadText}>
+                                Evidence-based botanical formulas, tactile linen garments, and restorative objects designed to sustain daily equilibrium.
                             </p>
                         </div>
                     </div>
 
                     <div className={styles.controlsBar}>
                         <nav className={styles.categoryNav} aria-label="Product Categories">
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat.key}
-                                    type="button"
-                                    className={`${styles.filterBtn} ${
-                                        activeCategory === cat.key ? styles.activeFilter : ""
-                                    }`}
-                                    onClick={() => handleCategoryChange(cat.key)}
-                                >
-                                    <span>{cat.label}</span>
-                                    {cat.key !== "all" && (
-                                        <span className={styles.countBadge}>
-                                            {shopItems.filter((i) => i.category === cat.key).length}
-                                        </span>
-                                    )}
-                                </button>
-                            ))}
+                            {categories.map((cat) => {
+                                const isActive = activeCategory === cat.key;
+                                return (
+                                    <button
+                                        key={cat.key}
+                                        type="button"
+                                        className={`${styles.filterBtn} ${isActive ? styles.activeFilter : ""}`}
+                                        onClick={() => handleCategoryChange(cat.key)}
+                                    >
+                                        <span className={styles.btnText}>{cat.label}</span>
+                                        <span className={styles.btnCount}>({cat.count})</span>
+                                    </button>
+                                );
+                            })}
                         </nav>
 
-                        <div className={styles.layoutSwitcher}>
-                            <span className={styles.switchLabel}>View Mode</span>
-                            <div className={styles.switchButtons}>
+                        <div className={styles.layoutToggle}>
+                            <span className={styles.toggleLabel}>LAYOUT</span>
+                            <div className={styles.toggleGroup}>
                                 <button
                                     type="button"
-                                    aria-label="Editorial Spread Layout"
-                                    className={`${styles.viewBtn} ${
-                                        layoutMode === "editorial" ? styles.activeView : ""
-                                    }`}
+                                    className={`${styles.viewBtn} ${layoutMode === "editorial" ? styles.activeView : ""}`}
                                     onClick={() => handleLayoutChange("editorial")}
                                 >
-                                    Editorial
+                                    [ SPREAD ]
                                 </button>
                                 <button
                                     type="button"
-                                    aria-label="Gallery Grid Layout"
-                                    className={`${styles.viewBtn} ${
-                                        layoutMode === "grid" ? styles.activeView : ""
-                                    }`}
-                                    onClick={() => handleLayoutChange("grid")}
+                                    className={`${styles.viewBtn} ${layoutMode === "archive" ? styles.activeView : ""}`}
+                                    onClick={() => handleLayoutChange("archive")}
                                 >
-                                    Grid
+                                    [ ARCHIVE ]
                                 </button>
                             </div>
                         </div>
@@ -335,39 +398,36 @@ export default function Products() {
                 <div
                     ref={gridRef}
                     className={`${styles.productGrid} ${
-                        layoutMode === "editorial" ? styles.editorialView : styles.gridView
+                        layoutMode === "editorial" ? styles.editorialView : styles.archiveView
                     }`}
                 >
                     {filteredItems.map((item) => (
                         <article
                             key={item.id}
                             className={`${styles.productCard} ${
-                                selectedItem?.id === item.id ? styles.cardActive : ""
+                                selectedItem?.id === item.id ? styles.activeCard : ""
                             }`}
                             data-category={item.category}
                         >
-                            <div
-                                className={styles.cardInner}
-                                onClick={() => setSelectedItem(selectedItem?.id === item.id ? null : item)}
-                            >
+                            <div className={styles.cardInner} onClick={() => setSelectedItem(item)}>
                                 <div className={styles.imageContainer}>
                                     <Image
                                         src={item.src}
                                         alt={item.alt}
                                         fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                                         unoptimized
                                         className={styles.cardImg}
                                     />
 
                                     <div className={styles.imageHeader}>
-                                        <span className={styles.itemIndex}>{item.indexStr}</span>
+                                        <span className={styles.itemSku}>{item.sku}</span>
                                         <span className={styles.itemCategory}>{item.categoryLabel}</span>
                                     </div>
 
-                                    <div className={styles.hoverOverlay}>
-                                        <span className={styles.inspectBtn}>
-                                            {selectedItem?.id === item.id ? "Close Details ✕" : "Ritual Story ↗"}
-                                        </span>
+                                    <div className={styles.hoverDrawer}>
+                                        <span className={styles.quickInspectText}>QUICK INSPECT +</span>
+                                        <span className={styles.viewVolume}>{item.volume}</span>
                                     </div>
                                 </div>
 
@@ -377,11 +437,11 @@ export default function Products() {
                                         <span className={styles.cardPrice}>{item.price}</span>
                                     </div>
 
-                                    <p className={styles.ritualNotes}>{item.ritualNotes}</p>
+                                    <p className={styles.cardRitualNotes}>{item.ritualNotes}</p>
 
-                                    <div className={styles.originFooter}>
-                                        <span className={styles.originText}>Provenance: {item.origin}</span>
-                                        <span className={styles.viewLink}>Acquire Object →</span>
+                                    <div className={styles.cardFooter}>
+                                        <span className={styles.originTag}>{item.origin}</span>
+                                        <span className={styles.acquireText}>ACQUIRE →</span>
                                     </div>
                                 </div>
                             </div>
@@ -390,68 +450,81 @@ export default function Products() {
                 </div>
 
                 {selectedItem && (
-                    <aside className={styles.spotlightInspection} aria-live="polite">
-                        <div className={styles.spotlightBackdrop} onClick={() => setSelectedItem(null)} />
-                        <div className={styles.spotlightModal}>
-                            <button
-                                type="button"
-                                className={styles.closeBtn}
-                                onClick={() => setSelectedItem(null)}
-                            >
-                                ✕
-                            </button>
-                            <div className={styles.spotlightGrid}>
-                                <div className={styles.spotlightMedia}>
+                    <aside className={styles.slideDrawer} aria-live="polite">
+                        <div className={styles.drawerBackdrop} onClick={() => setSelectedItem(null)} />
+                        <div className={styles.drawerPanel}>
+                            <header className={styles.drawerHeader}>
+                                <div className={styles.drawerMeta}>
+                                    <span>{selectedItem.sku}</span>
+                                    <span className={styles.dividerDot}>•</span>
+                                    <span>{selectedItem.categoryLabel}</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    aria-label="Close panel"
+                                    className={styles.closeDrawerBtn}
+                                    onClick={() => setSelectedItem(null)}
+                                >
+                                    [ CLOSE ✕ ]
+                                </button>
+                            </header>
+
+                            <div className={styles.drawerScrollable}>
+                                <div className={styles.drawerImageWrapper}>
                                     <Image
                                         src={selectedItem.src}
                                         alt={selectedItem.alt}
                                         fill
                                         unoptimized
-                                        className={styles.spotlightImg}
+                                        className={styles.drawerImg}
                                     />
                                 </div>
-                                <div className={styles.spotlightBody}>
-                                    <div className={styles.spotlightCategory}>
-                                        {selectedItem.categoryLabel} • {selectedItem.origin}
-                                    </div>
-                                    <h3 className={styles.spotlightTitle}>{selectedItem.title}</h3>
-                                    <div className={styles.spotlightPrice}>{selectedItem.price}</div>
 
-                                    <div className={styles.spotlightDivider} />
-
-                                    <div className={styles.detailSection}>
-                                        <h4>Ritual Application & Synergy</h4>
-                                        <p>{selectedItem.ritualNotes}</p>
+                                <div className={styles.drawerContent}>
+                                    <div className={styles.drawerTitleRow}>
+                                        <h3 className={styles.drawerTitle}>{selectedItem.title}</h3>
+                                        <span className={styles.drawerPrice}>{selectedItem.price}</span>
                                     </div>
 
-                                    <div className={styles.detailSection}>
-                                        <h4>Integrative Standard</h4>
-                                        <p>
-                                            Crafted free of synthetic binders, parabens, and micro-plastics.
-                                            Sustainably sourced and packaged in recyclable amber glass and organic flax.
-                                        </p>
+                                    <span className={styles.drawerVolume}>{selectedItem.volume}</span>
+
+                                    <div className={styles.specSection}>
+                                        <span className={styles.specLabel}>PROVENANCE & ORIGIN</span>
+                                        <p className={styles.specValue}>{selectedItem.origin}</p>
                                     </div>
 
-                                    <Link href={selectedItem.href} className={styles.spotlightAction}>
-                                        <span>Proceed to Acquisition</span>
-                                        <span>→</span>
-                                    </Link>
+                                    <div className={styles.specSection}>
+                                        <span className={styles.specLabel}>RITUAL APPLICATION</span>
+                                        <p className={styles.specValue}>{selectedItem.ritualNotes}</p>
+                                    </div>
+
+                                    <div className={styles.specSection}>
+                                        <span className={styles.specLabel}>BOTANICAL FORMULATION</span>
+                                        <p className={styles.specValueMono}>{selectedItem.ingredients}</p>
+                                    </div>
+
+                                    <div className={styles.drawerActionBox}>
+                                        <Link href={selectedItem.href} className={styles.acquireActionBtn}>
+                                            <span>ADD TO SANCTUARY DISPENSARY</span>
+                                            <span>{selectedItem.price}</span>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </aside>
                 )}
 
-                <footer className={styles.apothecaryFooter}>
-                    <div className={styles.footerRule} />
+                <footer className={styles.sectionFooter}>
+                    <div className={styles.footerBorder} />
                     <div className={styles.footerRow}>
-                        <div className={styles.guaranteeTag}>
-                            <span className={styles.guaranteeDot} />
-                            <span>100% CLINICAL & BOTANICAL PURITY GUARANTEED</span>
+                        <div className={styles.purityBadge}>
+                            <span className={styles.purityDot} />
+                            <span>100% CLINICAL & BOTANICAL PURITY ASSURED</span>
                         </div>
-                        <Link href="/" className={styles.allCatalogLink}>
-                            <span>Explore Full 40-Piece Sanctuary Dispensary</span>
-                            <span className={styles.arrowIcon}>→</span>
+                        <Link href="/" className={styles.archiveLink}>
+                            <span>EXPLORE FULL ARCHIVE (40 OBJECTS)</span>
+                            <span className={styles.arrow}>→</span>
                         </Link>
                     </div>
                 </footer>
