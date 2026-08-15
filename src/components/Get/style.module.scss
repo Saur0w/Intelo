@@ -1,17 +1,91 @@
 .contact {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  min-height: 90vh;
   width: 100%;
-  background-color: #fff;
+  background-color: #ffffff;
   overflow: hidden;
+  perspective: 1200px;
+  padding: clamp(6rem, 12vw, 12rem) 0;
+}
+
+.bgWatermarkTrack {
+  position: absolute;
+  top: 50%;
+  left: -15%;
+  width: 140%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  opacity: 0.035;
+  overflow: hidden;
+  white-space: nowrap;
+
+  .bgWatermarkText {
+    display: inline-block;
+    font-size: clamp(8rem, 20vw, 18rem);
+    font-weight: 900;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: #0d0d0d;
+    will-change: transform;
+    line-height: 0.8;
+  }
+}
+
+.ambientGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 164, 130, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+  will-change: transform;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  will-change: transform;
+}
+
+.subBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: "JetBrains Mono", monospace, monospace;
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #79746e;
+  will-change: transform;
+
+  .badgeDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #c4a482;
+  }
 }
 
 .heading {
   display: flex;
   justify-content: center;
   align-items: center;
+  will-change: transform;
 }
 
 .link {
@@ -40,7 +114,7 @@
   .secondary {
     display: inline-flex;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: clamp(2.25rem, 5vw, 4.5rem);
+    font-size: clamp(2.5rem, 6.5vw, 5.5rem);
     font-weight: 300;
     line-height: 1.1;
     letter-spacing: -0.035em;
@@ -77,4 +151,13 @@
     will-change: transform, width;
     pointer-events: none;
   }
+}
+
+.bottomTagline {
+  font-family: "JetBrains Mono", monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a8a29e;
+  will-change: transform;
 }

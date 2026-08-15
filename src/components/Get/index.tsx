@@ -4,17 +4,156 @@ import React, { useRef, useCallback } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./style.module.scss";
 
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(useGSAP, ScrollTrigger);
+}
+
 export default function Contact() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const bgWatermarkRef = useRef<HTMLSpanElement>(null);
+    const ambientGlowRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const badgeRef = useRef<HTMLDivElement>(null);
+    const taglineRef = useRef<HTMLSpanElement>(null);
+
+    useGSAP(
+        () => {
+            const section = sectionRef.current;
+            if (!section) return;
+
+            // 1. Ambient Background Parallax Watermark
+            if (bgWatermarkRef.current) {
+                gsap.fromTo(
+                    bgWatermarkRef.current,
+                    { xPercent: 12, yPercent: -12 },
+                    {
+                        xPercent: -16,
+                        yPercent: 12,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.8,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            // 2. Ambient Radial Glow Parallax
+            if (ambientGlowRef.current) {
+                gsap.fromTo(
+                    ambientGlowRef.current,
+                    { scale: 0.85, opacity: 0.4, yPercent: -20 },
+                    {
+                        scale: 1.25,
+                        opacity: 0.9,
+                        yPercent: 20,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 1.0,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            // 3. Central Content Parallax Float & Scale
+            if (contentRef.current) {
+                gsap.fromTo(
+                    contentRef.current,
+                    { y: 50, scale: 0.96 },
+                    {
+                        y: -50,
+                        scale: 1.03,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.6,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            // 4. Sub-Badge Parallax Micro-Glide
+            if (badgeRef.current) {
+                gsap.fromTo(
+                    badgeRef.current,
+                    { y: 25, opacity: 0.6 },
+                    {
+                        y: -20,
+                        opacity: 1,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top 80%",
+                            end: "bottom top",
+                            scrub: 0.5,
+                        },
+                    }
+                );
+            }
+
+            // 5. Bottom Tagline Parallax Drift
+            if (taglineRef.current) {
+                gsap.fromTo(
+                    taglineRef.current,
+                    { y: 30, letterSpacing: "0.12em" },
+                    {
+                        y: -25,
+                        letterSpacing: "0.22em",
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top 75%",
+                            end: "bottom top",
+                            scrub: 0.7,
+                        },
+                    }
+                );
+            }
+        },
+        { scope: sectionRef }
+    );
+
     return (
-        <section className={styles.contact}>
-            <div className={styles.heading}>
-                <PerspectiveLink
-                    href="/"
-                    primary="Get to know us"
-                    secondary="About us"
-                />
+        <section className={styles.contact} ref={sectionRef} id="contact">
+            {/* Background Parallax Watermark */}
+            <div className={styles.bgWatermarkTrack} aria-hidden="true">
+                <span ref={bgWatermarkRef} className={styles.bgWatermarkText}>
+                    CONNECT • INQUIRE • EXPERIENCE • SANCTUARY
+                </span>
+            </div>
+
+            <div ref={ambientGlowRef} className={styles.ambientGlow} aria-hidden="true" />
+
+            <div ref={contentRef} className={styles.contentWrapper}>
+                <div ref={badgeRef} className={styles.subBadge}>
+                    <span className={styles.badgeDot} />
+                    <span>08 / BEGIN THE JOURNEY</span>
+                </div>
+
+                <div className={styles.heading}>
+                    <PerspectiveLink
+                        href="/"
+                        primary="Get to know us"
+                        secondary="About us"
+                    />
+                </div>
+
+                <span ref={taglineRef} className={styles.bottomTagline}>
+                    Tucson • Lenox • Woodside • The Living Legacy
+                </span>
             </div>
         </section>
     );

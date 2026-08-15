@@ -32,10 +32,53 @@ $tablet-bp: 1024px;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  padding-top: clamp(4rem, 8vw, 7.5rem);
+  padding-top: clamp(4.5rem, 9vw, 8rem);
+  perspective: 1200px;
+}
+
+.bgWatermarkTrack {
+  position: absolute;
+  top: 18%;
+  left: -10%;
+  width: 130%;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  opacity: 0.04;
+  overflow: hidden;
+  white-space: nowrap;
+
+  .bgWatermarkText {
+    display: inline-block;
+    font-size: clamp(7rem, 18vw, 16rem);
+    font-weight: 900;
+    font-family: $font-sans;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: #ffffff;
+    will-change: transform;
+    line-height: 0.85;
+  }
+}
+
+.ambientGlow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 164, 130, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+  will-change: transform;
 }
 
 .container {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 1540px;
   margin: 0 auto;

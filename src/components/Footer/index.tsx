@@ -14,20 +14,67 @@ if (typeof window !== "undefined") {
 
 export default function Footer() {
     const footerRef = useRef<HTMLElement>(null);
+    const bgWatermarkRef = useRef<HTMLSpanElement>(null);
+    const ambientGlowRef = useRef<HTMLDivElement>(null);
     const statementRef = useRef<HTMLHeadingElement>(null);
+    const inquiryBlockRef = useRef<HTMLDivElement>(null);
     const inquiryLabelRef = useRef<HTMLSpanElement>(null);
     const inquiryLinkRef = useRef<HTMLAnchorElement>(null);
+    const newsletterBlockRef = useRef<HTMLDivElement>(null);
     const newsletterLabelRef = useRef<HTMLSpanElement>(null);
     const newsletterFormRef = useRef<HTMLFormElement>(null);
+    const logoContainerRef = useRef<HTMLDivElement>(null);
     const logoSvgRef = useRef<SVGSVGElement>(null);
 
     useGSAP(
         () => {
             const footer = footerRef.current;
-            const logoSvg = logoSvgRef.current;
+            const logoContainer = logoContainerRef.current;
             const statement = statementRef.current;
             if (!footer) return;
 
+            // 1. Background Watermark Parallax Glide
+            if (bgWatermarkRef.current) {
+                gsap.fromTo(
+                    bgWatermarkRef.current,
+                    { xPercent: 10, yPercent: -12 },
+                    {
+                        xPercent: -14,
+                        yPercent: 12,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footer,
+                            start: "top bottom",
+                            end: "bottom bottom",
+                            scrub: 0.8,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            // 2. Ambient Radial Glow Parallax
+            if (ambientGlowRef.current) {
+                gsap.fromTo(
+                    ambientGlowRef.current,
+                    { scale: 0.85, opacity: 0.3, yPercent: -20 },
+                    {
+                        scale: 1.25,
+                        opacity: 0.8,
+                        yPercent: 20,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footer,
+                            start: "top bottom",
+                            end: "bottom bottom",
+                            scrub: 1.0,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            // 3. Statement Parallax Drift & SplitText Reveal
             let splitStatement: SplitText | null = null;
             if (statement) {
                 splitStatement = new SplitText(statement, {
@@ -49,6 +96,57 @@ export default function Footer() {
                         toggleActions: "play none none reverse",
                     },
                 });
+
+                gsap.fromTo(
+                    statement,
+                    { y: 35, rotateX: 4 },
+                    {
+                        y: -30,
+                        rotateX: 0,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footer,
+                            start: "top bottom",
+                            end: "bottom bottom",
+                            scrub: 0.6,
+                        },
+                    }
+                );
+            }
+
+            // 4. Inquiry & Newsletter Differential Parallax
+            if (inquiryBlockRef.current) {
+                gsap.fromTo(
+                    inquiryBlockRef.current,
+                    { y: 25 },
+                    {
+                        y: -25,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footer,
+                            start: "top 80%",
+                            end: "bottom bottom",
+                            scrub: 0.65,
+                        },
+                    }
+                );
+            }
+
+            if (newsletterBlockRef.current) {
+                gsap.fromTo(
+                    newsletterBlockRef.current,
+                    { y: 35 },
+                    {
+                        y: -35,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footer,
+                            start: "top 80%",
+                            end: "bottom bottom",
+                            scrub: 0.75,
+                        },
+                    }
+                );
             }
 
             const splitTargets: HTMLElement[] = [];
@@ -89,6 +187,29 @@ export default function Footer() {
                         start: "top 70%",
                         toggleActions: "play none none reverse",
                     },
+                });
+            }
+
+            // 5. Right Navigation Columns Staggered Parallax
+            const navCols = footer.querySelectorAll<HTMLElement>(`.${styles.navCol}`);
+            if (navCols.length > 0) {
+                navCols.forEach((col, idx) => {
+                    const colSpeed = idx === 1 ? -45 : idx === 2 ? -25 : -35;
+                    gsap.fromTo(
+                        col,
+                        { y: 30 },
+                        {
+                            y: colSpeed,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: footer,
+                                start: "top bottom",
+                                end: "bottom bottom",
+                                scrub: 0.6 + idx * 0.1,
+                                invalidateOnRefresh: true,
+                            },
+                        }
+                    );
                 });
             }
 
@@ -140,19 +261,22 @@ export default function Footer() {
                 });
             }
 
-            if (logoSvg) {
+            // 6. Giant Logo Scroll Parallax & Scale
+            if (logoContainer) {
                 gsap.fromTo(
-                    logoSvg,
-                    { yPercent: 30, opacity: 0.6 },
+                    logoContainer,
+                    { yPercent: 35, scale: 0.92, opacity: 0.4 },
                     {
                         yPercent: 0,
+                        scale: 1.04,
                         opacity: 1,
                         ease: "none",
                         scrollTrigger: {
                             trigger: footer,
                             start: "top bottom",
                             end: "bottom bottom",
-                            scrub: 0.5,
+                            scrub: 0.6,
+                            invalidateOnRefresh: true,
                         },
                     }
                 );
@@ -171,7 +295,16 @@ export default function Footer() {
     };
 
     return (
-        <footer className={styles.footer} ref={footerRef}>
+        <footer className={styles.footer} ref={footerRef} id="footer">
+            {/* Background Parallax Watermark */}
+            <div className={styles.bgWatermarkTrack} aria-hidden="true">
+                <span ref={bgWatermarkRef} className={styles.bgWatermarkText}>
+                    WELLNESS • LONGEVITY • INTEGRATIVE • SANCTUARY
+                </span>
+            </div>
+
+            <div ref={ambientGlowRef} className={styles.ambientGlow} aria-hidden="true" />
+
             <div className={styles.container}>
                 <div className={styles.topSection}>
                     <div className={styles.leftColumn}>
@@ -179,7 +312,7 @@ export default function Footer() {
                             Live well. Age well.
                         </h2>
 
-                        <div className={styles.inquiryBlock}>
+                        <div ref={inquiryBlockRef} className={styles.inquiryBlock}>
                             <span ref={inquiryLabelRef} className={styles.label}>
                                 Reservations & Inquiries:
                             </span>
@@ -194,7 +327,7 @@ export default function Footer() {
                             </div>
                         </div>
 
-                        <div className={styles.newsletterBlock}>
+                        <div ref={newsletterBlockRef} className={styles.newsletterBlock}>
                             <span ref={newsletterLabelRef} className={styles.label}>
                                 Sign up for our longevity journal (No spam)
                             </span>
@@ -278,9 +411,8 @@ export default function Footer() {
                 </div>
             </div>
 
-
-            <div className={styles.giantLogoContainer}>
-                <svg className="styles_canyonRanchLogo__DiwtJ" xmlns="http://www.w3.org/2000/svg" width="160"
+            <div ref={logoContainerRef} className={styles.giantLogoContainer}>
+                <svg ref={logoSvgRef} className="styles_canyonRanchLogo__DiwtJ" xmlns="http://www.w3.org/2000/svg" width="160"
                      height="22" viewBox="0 0 160 22" fill="none" aria-hidden="true">
                     <path
                         d="M15.8369 18.1781C15.8721 18.1429 15.9014 18.1136 16.1831 17.2158C16.1831 17.2099 16.2652 16.8989 16.2652 16.8989C16.2711 16.8755 16.4236 14.8042 16.4236 14.8042L15.6139 15.9777C14.8804 16.9224 13.6541 18.0138 10.6205 18.0138C4.75869 18.0138 2.12997 13.3138 2.12997 8.65484C2.12997 3.99589 5.02273 1.03858 9.49978 1.03858C11.4537 1.03858 13.2786 1.65469 14.1118 2.2708C14.9215 2.8693 15.3968 5.04621 15.3968 5.04621L15.6022 4.08978L15.8017 2.58765V2.54658C15.8017 2.54658 15.8017 2.54071 15.7782 1.36131V1.31436L15.7547 1.2733C15.7313 1.22635 15.6902 1.15007 15.2912 1.03272L14.5401 0.833219C13.7421 0.586776 11.6239 0 9.38242 0C4.71762 0 0 3.33285 0 9.70516C0 11.8997 0.756929 19.0582 10.4914 19.0582C12.7153 19.0582 14.7983 18.5654 15.1621 18.4128C15.1797 18.4128 15.344 18.3541 15.4907 18.313C15.4848 18.313 15.7371 18.2485 15.7371 18.2485L15.7958 18.2309L15.831 18.1957L15.8369 18.1781Z"
