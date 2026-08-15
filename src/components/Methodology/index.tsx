@@ -41,7 +41,7 @@ export default function Approach() {
         () => {
             const container = containerRef.current;
             if (!container) return;
-            
+
             if (headingRef.current) {
                 const splitHeading = new SplitText(headingRef.current, {
                     type: "words,chars",
