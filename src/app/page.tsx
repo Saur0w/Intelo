@@ -13,6 +13,7 @@ import Products from "@/components/Products";
 import Methodology from "@/components/Methodology";
 import Study from "@/components/Study";
 import Five from "@/components/Five";
+import Well from "@/components/Well";
 
 export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -26,6 +27,7 @@ export default function Home() {
         <Five />
         <Products />
         <Brands />
+        <Well />
         <Methodology />
         <Contact />
         <Footer />
