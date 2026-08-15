@@ -28,7 +28,6 @@ export default function Footer() {
             const statement = statementRef.current;
             if (!footer) return;
 
-            // 1. Statement Split Text Mask Reveal
             let splitStatement: SplitText | null = null;
             if (statement) {
                 splitStatement = new SplitText(statement, {
@@ -52,7 +51,6 @@ export default function Footer() {
                 });
             }
 
-            // 2. Inquiry & Newsletter Split Text Mask Reveals
             const splitTargets: HTMLElement[] = [];
             if (inquiryLabelRef.current) splitTargets.push(inquiryLabelRef.current);
             if (inquiryLinkRef.current) splitTargets.push(inquiryLinkRef.current);
@@ -94,7 +92,6 @@ export default function Footer() {
                 });
             }
 
-            // 3. Navigation Columns & Links Split / Mask Reveal
             const navLinkItems = footer.querySelectorAll<HTMLElement>(`.${styles.linkMaskItem}`);
             const locationItems = footer.querySelectorAll<HTMLElement>(`.${styles.locMaskItem}`);
             const copyrightItem = footer.querySelector<HTMLElement>(`.${styles.copyMaskItem}`);
@@ -143,7 +140,6 @@ export default function Footer() {
                 });
             }
 
-            // 4. Bottom Giant Logo Parallax Scrub
             if (logoSvg) {
                 gsap.fromTo(
                     logoSvg,
@@ -190,10 +186,10 @@ export default function Footer() {
                             <div className={styles.maskContainer}>
                                 <Link
                                     ref={inquiryLinkRef}
-                                    href="mailto:concierge@canyonranch.com"
+                                    href="mailto:xyz@xyz.com"
                                     className={styles.inquiryLink}
                                 >
-                                    concierge@canyonranch.com
+                                    xyz@xyz.com
                                 </Link>
                             </div>
                         </div>

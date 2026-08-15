@@ -4,10 +4,11 @@ import React, { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import styles from "./style.module.scss";
 
 if (typeof window !== "undefined") {
-    gsap.registerPlugin(useGSAP, ScrollTrigger);
+    gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 }
 
 interface Milestone {
@@ -48,140 +49,522 @@ const stats = [
     { value: "45+", label: "Years of Proven Answers" }
 ];
 
-function SplitTextReveal({
-    text,
-    className,
-    tag = "p"
-}: {
-    text: string;
-    className?: string;
-    tag?: "h1" | "h2" | "h3" | "p";
-}) {
-    const Tag = tag;
-    const words = text.split(" ");
-
-    return (
-        <Tag className={className} aria-label={text}>
-            {words.map((word, wIdx) => (
-                <span key={wIdx} className={styles.wordWrapper}>
-                    <span className={`${styles.wordInner} reveal-word`}>
-                        {word}
-                    </span>
-                    {wIdx < words.length - 1 && "\u00A0"}
-                </span>
-            ))}
-        </Tag>
-    );
-}
-
 export default function About() {
     const aboutRef = useRef<HTMLDivElement>(null);
-    const manifestoRef = useRef<HTMLDivElement>(null);
+    const bgWatermarkRef = useRef<HTMLDivElement>(null);
+    const bgWatermarkSecRef = useRef<HTMLDivElement>(null);
+    const ambientGlowRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLElement>(null);
+    const subLabelRef = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLHeadingElement>(null);
+    const manifestoWrapperRef = useRef<HTMLDivElement>(null);
+    const manifestoRef = useRef<HTMLParagraphElement>(null);
+    const stickyColRef = useRef<HTMLElement>(null);
+    const stickyHeadingRef = useRef<HTMLHeadingElement>(null);
+    const stickyDescRef = useRef<HTMLParagraphElement>(null);
     const storyListRef = useRef<HTMLDivElement>(null);
     const statsRef = useRef<HTMLDivElement>(null);
+    const footerNoteRef = useRef<HTMLElement>(null);
+    const quoteRef = useRef<HTMLParagraphElement>(null);
+    const signatureRef = useRef<HTMLSpanElement>(null);
 
     useGSAP(
         () => {
             const container = aboutRef.current;
             if (!container) return;
 
-            const headerWords = container.querySelectorAll(`.${styles.header} .reveal-word`);
-            const subWords = container.querySelectorAll(`.${styles.subLabel} .reveal-word`);
-
-            gsap.fromTo(
-                subWords,
-                { yPercent: 110, opacity: 0 },
-                {
-                    yPercent: 0,
-                    opacity: 1,
-                    duration: 0.8,
-                    stagger: 0.02,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: container,
-                        start: "top 80%"
-                    }
-                }
-            );
-
-            gsap.fromTo(
-                headerWords,
-                { yPercent: 120, opacity: 0 },
-                {
-                    yPercent: 0,
-                    opacity: 1,
-                    duration: 1.1,
-                    stagger: 0.015,
-                    ease: "power4.out",
-                    scrollTrigger: {
-                        trigger: container,
-                        start: "top 75%"
-                    }
-                }
-            );
-
-            const manifestoWords = manifestoRef.current?.querySelectorAll(".reveal-word");
-            if (manifestoWords) {
+            if (bgWatermarkRef.current) {
                 gsap.fromTo(
-                    manifestoWords,
-                    { opacity: 0.15, y: 8 },
+                    bgWatermarkRef.current,
+                    { xPercent: 12, yPercent: -15 },
                     {
-                        opacity: 1,
-                        y: 0,
-                        stagger: 0.05,
+                        xPercent: -18,
+                        yPercent: 15,
                         ease: "none",
                         scrollTrigger: {
-                            trigger: manifestoRef.current,
-                            start: "top 75%",
-                            end: "bottom 45%",
-                            scrub: 0.75
-                        }
+                            trigger: container,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.8,
+                            invalidateOnRefresh: true,
+                        },
                     }
                 );
             }
 
-            const storyCards = storyListRef.current?.querySelectorAll(`.${styles.storyCard}`);
-            if (storyCards) {
-                storyCards.forEach((card) => {
-                    const line = card.querySelector(`.${styles.cardLine}`);
-                    const content = card.querySelector(`.${styles.cardBody}`);
-
-                    const tl = gsap.timeline({
+            if (bgWatermarkSecRef.current) {
+                gsap.fromTo(
+                    bgWatermarkSecRef.current,
+                    { xPercent: -15, yPercent: 12 },
+                    {
+                        xPercent: 15,
+                        yPercent: -12,
+                        ease: "none",
                         scrollTrigger: {
-                            trigger: card,
-                            start: "top 82%",
-                            toggleActions: "play none none reverse"
-                        }
-                    });
+                            trigger: container,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 1.0,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
 
-                    tl.fromTo(
-                        line,
-                        { scaleX: 0, transformOrigin: "left center" },
-                        { scaleX: 1, duration: 1, ease: "power3.inOut" }
-                    ).fromTo(
-                        content,
-                        { y: 35, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" },
-                        "-=0.5"
-                    );
+            if (ambientGlowRef.current) {
+                gsap.fromTo(
+                    ambientGlowRef.current,
+                    { yPercent: -25, scale: 0.85, opacity: 0.4 },
+                    {
+                        yPercent: 30,
+                        scale: 1.25,
+                        opacity: 0.9,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: container,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 1.2,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            if (subLabelRef.current) {
+                const splitSub = new SplitText(subLabelRef.current, {
+                    type: "words",
+                    wordsClass: styles.wordMask,
+                });
+
+                gsap.fromTo(
+                    splitSub.words,
+                    { yPercent: 110, opacity: 0 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        stagger: 0.02,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: subLabelRef.current,
+                            start: "top 85%",
+                        },
+                    }
+                );
+
+                gsap.fromTo(
+                    subLabelRef.current,
+                    { y: 15 },
+                    {
+                        y: -25,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: headerRef.current,
+                            start: "top 85%",
+                            end: "bottom top",
+                            scrub: 0.5,
+                        },
+                    }
+                );
+            }
+
+            if (titleRef.current) {
+                const splitTitle = new SplitText(titleRef.current, {
+                    type: "words,chars",
+                    wordsClass: styles.wordMask,
+                    charsClass: styles.charInner,
+                });
+
+                gsap.fromTo(
+                    splitTitle.chars,
+                    { yPercent: 120, opacity: 0, rotateZ: 3 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        rotateZ: 0,
+                        duration: 1.1,
+                        stagger: 0.015,
+                        ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: titleRef.current,
+                            start: "top 82%",
+                        },
+                    }
+                );
+
+                gsap.fromTo(
+                    titleRef.current,
+                    { y: 0 },
+                    {
+                        y: -45,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: headerRef.current,
+                            start: "top 75%",
+                            end: "bottom top",
+                            scrub: 0.6,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            if (headerRef.current) {
+                gsap.to(headerRef.current, {
+                    yPercent: -12,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: headerRef.current,
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: 0.5,
+                        invalidateOnRefresh: true,
+                    },
                 });
             }
 
-            const statItems = statsRef.current?.querySelectorAll(`.${styles.statItem}`);
-            if (statItems) {
+            if (manifestoRef.current) {
+                const splitManifesto = new SplitText(manifestoRef.current, {
+                    type: "lines,words",
+                    linesClass: styles.lineMask,
+                    wordsClass: styles.wordInner,
+                });
+
                 gsap.fromTo(
-                    statItems,
-                    { y: 40, opacity: 0 },
+                    splitManifesto.words,
+                    { yPercent: 115, opacity: 0 },
                     {
-                        y: 0,
+                        yPercent: 0,
                         opacity: 1,
-                        duration: 0.9,
-                        stagger: 0.12,
+                        duration: 1.0,
+                        stagger: 0.015,
                         ease: "power3.out",
                         scrollTrigger: {
-                            trigger: statsRef.current,
-                            start: "top 85%"
+                            trigger: manifestoRef.current,
+                            start: "top 80%",
+                        },
+                    }
+                );
+
+                gsap.fromTo(
+                    manifestoRef.current,
+                    { yPercent: 16, rotateX: 3 },
+                    {
+                        yPercent: -16,
+                        rotateX: -2,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: manifestoWrapperRef.current,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.7,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            if (stickyHeadingRef.current) {
+                const splitStickyHeading = new SplitText(stickyHeadingRef.current, {
+                    type: "lines,words",
+                    linesClass: styles.lineMask,
+                    wordsClass: styles.wordInner,
+                });
+
+                gsap.fromTo(
+                    splitStickyHeading.words,
+                    { yPercent: 120, opacity: 0 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.9,
+                        stagger: 0.02,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: stickyHeadingRef.current,
+                            start: "top 85%",
+                        },
+                    }
+                );
+
+                gsap.fromTo(
+                    stickyHeadingRef.current,
+                    { y: 15 },
+                    {
+                        y: -30,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: storyListRef.current,
+                            start: "top 70%",
+                            end: "bottom top",
+                            scrub: 0.6,
+                        },
+                    }
+                );
+            }
+
+            if (stickyDescRef.current) {
+                const splitStickyDesc = new SplitText(stickyDescRef.current, {
+                    type: "lines",
+                    linesClass: styles.lineMask,
+                });
+
+                gsap.fromTo(
+                    splitStickyDesc.lines,
+                    { yPercent: 110, opacity: 0 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.85,
+                        stagger: 0.06,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: stickyDescRef.current,
+                            start: "top 85%",
+                        },
+                    }
+                );
+
+                gsap.fromTo(
+                    stickyDescRef.current,
+                    { y: 20 },
+                    {
+                        y: -15,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: storyListRef.current,
+                            start: "top 70%",
+                            end: "bottom top",
+                            scrub: 0.8,
+                        },
+                    }
+                );
+            }
+
+            const cards = storyListRef.current?.querySelectorAll<HTMLElement>(`.${styles.storyCard}`);
+            if (cards) {
+                cards.forEach((card, idx) => {
+                    const line = card.querySelector(`.${styles.cardLine}`);
+                    const year = card.querySelector(`.${styles.cardYear}`);
+                    const tag = card.querySelector(`.${styles.cardTag}`);
+                    const title = card.querySelector(`.${styles.cardTitle}`);
+                    const desc = card.querySelector(`.${styles.cardDesc}`);
+                    const body = card.querySelector(`.${styles.cardBody}`);
+
+                    const cardTl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top 85%",
+                            toggleActions: "play none none reverse",
+                        },
+                    });
+
+                    if (line) {
+                        cardTl.fromTo(
+                            line,
+                            { scaleX: 0, transformOrigin: "left center", opacity: 0.3 },
+                            { scaleX: 1, opacity: 1, duration: 1, ease: "power3.inOut" }
+                        );
+                    }
+
+                    if (year && tag) {
+                        cardTl.fromTo(
+                            [year, tag],
+                            { y: 24, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power3.out" },
+                            "-=0.6"
+                        );
+                    }
+
+                    if (title) {
+                        const splitCardTitle = new SplitText(title, {
+                            type: "lines,words",
+                            linesClass: styles.lineMask,
+                            wordsClass: styles.wordInner,
+                        });
+
+                        cardTl.fromTo(
+                            splitCardTitle.words,
+                            { yPercent: 110, opacity: 0 },
+                            { yPercent: 0, opacity: 1, duration: 0.75, stagger: 0.02, ease: "power3.out" },
+                            "-=0.4"
+                        );
+                    }
+
+                    if (desc) {
+                        const splitCardDesc = new SplitText(desc, {
+                            type: "lines",
+                            linesClass: styles.lineMask,
+                        });
+
+                        cardTl.fromTo(
+                            splitCardDesc.lines,
+                            { yPercent: 110, opacity: 0 },
+                            { yPercent: 0, opacity: 1, duration: 0.8, stagger: 0.04, ease: "power3.out" },
+                            "-=0.5"
+                        );
+                    }
+
+                    if (body) {
+                        const startY = idx % 2 === 0 ? 25 : 45;
+                        const endY = idx % 2 === 0 ? -40 : -75;
+                        gsap.fromTo(
+                            body,
+                            { y: startY },
+                            {
+                                y: endY,
+                                ease: "none",
+                                scrollTrigger: {
+                                    trigger: card,
+                                    start: "top bottom",
+                                    end: "bottom top",
+                                    scrub: 0.6 + idx * 0.1,
+                                    invalidateOnRefresh: true,
+                                },
+                            }
+                        );
+                    }
+
+                    if (year) {
+                        gsap.fromTo(
+                            year,
+                            { x: idx % 2 === 0 ? -8 : 8 },
+                            {
+                                x: idx % 2 === 0 ? 12 : -12,
+                                ease: "none",
+                                scrollTrigger: {
+                                    trigger: card,
+                                    start: "top bottom",
+                                    end: "bottom top",
+                                    scrub: 0.7,
+                                },
+                            }
+                        );
+                    }
+                });
+            }
+
+            const statItems = statsRef.current?.querySelectorAll<HTMLElement>(`.${styles.statItem}`);
+            if (statItems) {
+                statItems.forEach((item, idx) => {
+                    const numberElem = item.querySelector(`.${styles.statNumber}`);
+                    const labelElem = item.querySelector(`.${styles.statLabel}`);
+
+                    const statTl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: item,
+                            start: "top 85%",
+                        },
+                    });
+
+                    statTl
+                        .fromTo(
+                            numberElem,
+                            { yPercent: 100, opacity: 0 },
+                            { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out" }
+                        )
+                        .fromTo(
+                            labelElem,
+                            { y: 12, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+                            "-=0.5"
+                        );
+
+                    const parallaxSpeed = ((idx % 2) + 1) * -35 - (idx * 6);
+                    gsap.fromTo(
+                        item,
+                        { y: 25 },
+                        {
+                            y: parallaxSpeed,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: statsRef.current,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: 0.6 + idx * 0.1,
+                                invalidateOnRefresh: true,
+                            },
                         }
+                    );
+
+                    if (numberElem) {
+                        gsap.fromTo(
+                            numberElem,
+                            { yPercent: 12, scale: 0.95 },
+                            {
+                                yPercent: -18,
+                                scale: 1.04,
+                                ease: "none",
+                                scrollTrigger: {
+                                    trigger: item,
+                                    start: "top bottom",
+                                    end: "bottom top",
+                                    scrub: 0.7,
+                                },
+                            }
+                        );
+                    }
+                });
+            }
+
+            if (quoteRef.current) {
+                const splitQuote = new SplitText(quoteRef.current, {
+                    type: "lines,words",
+                    linesClass: styles.lineMask,
+                    wordsClass: styles.wordInner,
+                });
+
+                gsap.fromTo(
+                    splitQuote.words,
+                    { yPercent: 115, opacity: 0 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        duration: 0.9,
+                        stagger: 0.015,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: quoteRef.current,
+                            start: "top 85%",
+                        },
+                    }
+                );
+            }
+
+            if (footerNoteRef.current) {
+                gsap.fromTo(
+                    footerNoteRef.current,
+                    { y: 55, rotateX: 4 },
+                    {
+                        y: -45,
+                        rotateX: -2,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footerNoteRef.current,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.7,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            if (signatureRef.current) {
+                gsap.fromTo(
+                    signatureRef.current,
+                    { x: -20, letterSpacing: "0.12em" },
+                    {
+                        x: 20,
+                        letterSpacing: "0.22em",
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: footerNoteRef.current,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.8,
+                        },
                     }
                 );
             }
@@ -191,32 +574,44 @@ export default function About() {
 
     return (
         <section className={styles.about} ref={aboutRef} id="about">
+            <div className={styles.bgWatermarkTrack} aria-hidden="true">
+                <span ref={bgWatermarkRef} className={styles.bgWatermarkText}>
+                    INTEGRATIVE • SANCTUARY • VITALITY • HERITAGE
+                </span>
+            </div>
+
+            <div className={styles.bgWatermarkTrackSecondary} aria-hidden="true">
+                <span ref={bgWatermarkSecRef} className={styles.bgWatermarkTextSecondary}>
+                    [ EST. 1979 ] • LIFELONG LONGEVITY • TUCSON
+                </span>
+            </div>
+
+            <div ref={ambientGlowRef} className={styles.ambientGlow} aria-hidden="true" />
+
             <div className={styles.container}>
-                <header className={styles.header}>
-                    <div className={styles.subLabel}>
+                <header className={styles.header} ref={headerRef}>
+                    <div className={styles.subLabel} ref={subLabelRef}>
                         <span className={styles.badgeDot} />
-                        <SplitTextReveal text="ORIGIN & PHILOSOPHY" tag="p" />
+                        <span>ORIGIN & PHILOSOPHY</span>
                     </div>
-                    <SplitTextReveal
-                        text="Inspiring Your Well Way of Life"
-                        tag="h2"
-                        className={styles.mainTitle}
-                    />
+                    <h2 ref={titleRef} className={styles.mainTitle}>
+                        Inspiring Your Well Way of Life
+                    </h2>
                 </header>
 
-                <div className={styles.manifestoWrapper} ref={manifestoRef}>
-                    <p className={styles.manifestoText}>
+                <div className={styles.manifestoWrapper} ref={manifestoWrapperRef}>
+                    <p ref={manifestoRef} className={styles.manifestoText}>
                         <span className={styles.manifestoLead}>The original trailblazer</span> of integrative wellness, Canyon Ranch began with one man’s pursuit of vitality before wellness was a household word. That pursuit has since transformed an industry and guided countless individuals to realize their highest state of longevity.
                     </p>
                 </div>
 
                 <div className={styles.storySection}>
-                    <aside className={styles.stickyColumn}>
+                    <aside className={styles.stickyColumn} ref={stickyColRef}>
                         <span className={styles.stickyIndex}>01 / HERITAGE</span>
-                        <h3 className={styles.stickyHeading}>
+                        <h3 ref={stickyHeadingRef} className={styles.stickyHeading}>
                             A four-decade compass for lifelong well-being.
                         </h3>
-                        <p className={styles.stickyDescription}>
+                        <p ref={stickyDescRef} className={styles.stickyDescription}>
                             Where ancient wisdom aligns with medical rigor across four immersive sanctuaries in Tucson, Lenox, Woodside, and beyond.
                         </p>
                     </aside>
@@ -241,17 +636,21 @@ export default function About() {
                 <div className={styles.statsGrid} ref={statsRef}>
                     {stats.map((stat, idx) => (
                         <div key={idx} className={styles.statItem}>
-                            <span className={styles.statNumber}>{stat.value}</span>
+                            <div className={styles.statNumberMask}>
+                                <span className={styles.statNumber}>{stat.value}</span>
+                            </div>
                             <span className={styles.statLabel}>{stat.label}</span>
                         </div>
                     ))}
                 </div>
 
-                <footer className={styles.footerNote}>
-                    <p className={styles.quote}>
+                <footer className={styles.footerNote} ref={footerNoteRef}>
+                    <p ref={quoteRef} className={styles.quote}>
                         “We continue to deliver new ways to well-being where you visit, stay, and live—never losing sight of personal transformation.”
                     </p>
-                    <span className={styles.signature}>Canyon Ranch Integrative Collective</span>
+                    <span ref={signatureRef} className={styles.signature}>
+                        Canyon Ranch Integrative Collective
+                    </span>
                 </footer>
             </div>
         </section>

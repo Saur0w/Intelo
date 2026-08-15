@@ -1,19 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@300;400;500&display=swap');
 
 $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-mono: 'JetBrains Mono', monospace;
+
 $color-bg: #f7f7f7;
 $color-text: #171615;
 $color-text-muted: #79746e;
 $color-accent: #c4a482;
 $color-border: rgba(23, 22, 21, 0.1);
+
 $mobile-bp: 768px;
 $tablet-bp: 1024px;
-
-@mixin flex-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .about {
   position: relative;
@@ -22,38 +19,116 @@ $tablet-bp: 1024px;
   background-color: $color-bg;
   color: $color-text;
   font-family: $font-sans;
-  padding: clamp(4rem, 10vw, 8.5rem) 0;
+  padding: clamp(5rem, 10vw, 10.5rem) 0;
   overflow: hidden;
+  perspective: 1200px;
+}
+
+.bgWatermarkTrack {
+  position: absolute;
+  top: 15%;
+  left: -10%;
+  width: 130%;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  opacity: 0.04;
+  overflow: hidden;
+  white-space: nowrap;
+
+  .bgWatermarkText {
+    display: inline-block;
+    font-size: clamp(7rem, 18vw, 16rem);
+    font-weight: 900;
+    font-family: $font-sans;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: $color-text;
+    will-change: transform;
+    line-height: 0.85;
+  }
+}
+
+.bgWatermarkTrackSecondary {
+  position: absolute;
+  bottom: 12%;
+  right: -10%;
+  width: 130%;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  opacity: 0.035;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: right;
+
+  .bgWatermarkTextSecondary {
+    display: inline-block;
+    font-size: clamp(6rem, 16vw, 14rem);
+    font-weight: 800;
+    font-family: $font-mono;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $color-accent;
+    will-change: transform;
+    line-height: 0.85;
+  }
+}
+
+.ambientGlow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 164, 130, 0.08) 0%, rgba(247, 247, 247, 0) 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(50px);
+  will-change: transform;
 }
 
 .container {
-  max-width: 1360px;
+  position: relative;
+  z-index: 1;
+  max-width: 1380px;
   margin: 0 auto;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
 }
 
-.wordWrapper {
-  display: inline-flex;
+.wordMask,
+.lineMask {
+  display: block;
   overflow: hidden;
   vertical-align: top;
-  padding-bottom: 0.15em;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
 
-  .wordInner {
-    display: inline-block;
-    will-change: transform, opacity;
-  }
+.wordMask {
+  display: inline-flex;
+}
+
+.charInner,
+.wordInner {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: 0 100%;
 }
 
 .header {
   margin-bottom: clamp(3rem, 7vw, 5.5rem);
+  will-change: transform;
 
   .subLabel {
     display: inline-flex;
     align-items: center;
     gap: 0.65rem;
-    font-size: clamp(0.7rem, 1.2vw, 0.82rem);
-    font-weight: 600;
-    letter-spacing: 0.24em;
+    font-family: $font-mono;
+    font-size: clamp(0.7rem, 1.1vw, 0.8rem);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: $color-text-muted;
     margin-bottom: 1.25rem;
@@ -67,9 +142,9 @@ $tablet-bp: 1024px;
   }
 
   .mainTitle {
-    font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+    font-size: clamp(2.4rem, 5.8vw, 4.75rem);
     font-weight: 400;
-    line-height: 1.06;
+    line-height: 1.04;
     letter-spacing: -0.035em;
     text-transform: uppercase;
     color: $color-text;
@@ -82,16 +157,18 @@ $tablet-bp: 1024px;
   border-top: 1px solid $color-border;
   border-bottom: 1px solid $color-border;
   padding: clamp(2.75rem, 5.5vw, 4.5rem) 0;
-  margin-bottom: clamp(4rem, 8vw, 7.5rem);
+  margin-bottom: clamp(4.5rem, 8vw, 7.5rem);
+  overflow: hidden;
 
   .manifestoText {
-    font-size: clamp(1.25rem, 2.7vw, 2.25rem);
+    font-size: clamp(1.25rem, 2.6vw, 2.25rem);
     font-weight: 300;
     line-height: 1.38;
     letter-spacing: -0.02em;
     color: $color-text;
     max-width: 44ch;
     margin: 0;
+    will-change: transform;
 
     .manifestoLead {
       font-weight: 500;
@@ -114,18 +191,18 @@ $tablet-bp: 1024px;
 
   .stickyColumn {
     position: sticky;
-    top: 5rem;
+    top: 6rem;
 
     @media (max-width: $tablet-bp) {
       position: static;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     .stickyIndex {
       display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
+      font-family: $font-mono;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
       color: $color-accent;
       margin-bottom: 1.25rem;
       text-transform: uppercase;
@@ -153,7 +230,7 @@ $tablet-bp: 1024px;
   .storyList {
     display: flex;
     flex-direction: column;
-    gap: clamp(2rem, 4.5vw, 3.5rem);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
 
     .storyCard {
       position: relative;
@@ -175,16 +252,17 @@ $tablet-bp: 1024px;
           margin-bottom: 0.85rem;
 
           .cardYear {
+            font-family: $font-mono;
             font-size: clamp(1.35rem, 2vw, 1.85rem);
-            font-weight: 300;
+            font-weight: 400;
             letter-spacing: -0.03em;
             color: $color-text;
           }
 
           .cardTag {
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
+            font-family: $font-mono;
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             color: $color-accent;
           }
@@ -218,7 +296,7 @@ $tablet-bp: 1024px;
   border-top: 1px solid $color-border;
   border-bottom: 1px solid $color-border;
   padding: clamp(2.5rem, 5vw, 4rem) 0;
-  margin-bottom: clamp(4rem, 8vw, 7rem);
+  margin-bottom: clamp(4.5rem, 8vw, 7.5rem);
 
   @media (max-width: $tablet-bp) {
     grid-template-columns: repeat(2, 1fr);
@@ -233,20 +311,28 @@ $tablet-bp: 1024px;
   .statItem {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.45rem;
 
-    .statNumber {
-      font-size: clamp(2.5rem, 4.5vw, 4rem);
-      font-weight: 300;
-      line-height: 1;
-      letter-spacing: -0.04em;
-      color: $color-text;
+    .statNumberMask {
+      overflow: hidden;
+      padding-bottom: 0.05em;
+
+      .statNumber {
+        display: inline-block;
+        font-size: clamp(2.5rem, 4.5vw, 4rem);
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        font-variant-numeric: tabular-nums;
+        color: $color-text;
+        will-change: transform, opacity;
+      }
     }
 
     .statLabel {
-      font-size: 0.82rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      font-family: $font-mono;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: $color-text-muted;
     }
@@ -257,9 +343,10 @@ $tablet-bp: 1024px;
   text-align: center;
   max-width: 46ch;
   margin: 0 auto;
+  will-change: transform;
 
   .quote {
-    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
     font-weight: 300;
     font-style: italic;
     line-height: 1.6;
@@ -269,9 +356,9 @@ $tablet-bp: 1024px;
 
   .signature {
     display: inline-block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
+    font-family: $font-mono;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: $color-accent;
   }
