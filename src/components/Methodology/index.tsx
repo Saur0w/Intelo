@@ -41,8 +41,7 @@ export default function Approach() {
         () => {
             const container = containerRef.current;
             if (!container) return;
-
-            // 1. Heading SplitText Reveal
+            
             if (headingRef.current) {
                 const splitHeading = new SplitText(headingRef.current, {
                     type: "words,chars",
@@ -67,7 +66,6 @@ export default function Approach() {
                 );
             }
 
-            // 2. Row Dividers & Text Stagger Reveal
             const rows = container.querySelectorAll(`.${styles.row}`);
             rows.forEach((row) => {
                 const line = row.querySelector(`.${styles.divider}`);
@@ -114,7 +112,6 @@ export default function Approach() {
                 }
             });
 
-            // 3. Center-Origin Expanding Clip-Path Image on Scroll
             if (imageWrapperRef.current && imgInnerRef.current) {
                 gsap.fromTo(
                     imageWrapperRef.current,
@@ -134,7 +131,6 @@ export default function Approach() {
                     }
                 );
 
-                // Subtle inner counter-scale for parallax depth
                 gsap.fromTo(
                     imgInnerRef.current,
                     { scale: 1.2 },
@@ -157,14 +153,12 @@ export default function Approach() {
     return (
         <section className={styles.approachSection} ref={containerRef}>
             <div className={styles.container}>
-                {/* ---------------- Header ---------------- */}
                 <div className={styles.header}>
                     <h2 ref={headingRef} className={styles.title}>
                         The well way of life.
                     </h2>
                 </div>
 
-                {/* ---------------- Two-Column Philosophy Rows ---------------- */}
                 <div className={styles.rowsWrapper} ref={contentRef}>
                     {approachData.map((item, index) => (
                         <div key={index} className={styles.row}>
@@ -182,7 +176,6 @@ export default function Approach() {
                     <div className={styles.bottomDivider} />
                 </div>
 
-                {/* ---------------- Center Expanding Parallax Media ---------------- */}
                 <div className={styles.imageSection}>
                     <div className={styles.imageWrapper} ref={imageWrapperRef}>
                         <div className={styles.imgInner} ref={imgInnerRef}>

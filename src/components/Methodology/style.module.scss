@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-// -------------------------------------------------------------
-// Variables & Breakpoints
-// -------------------------------------------------------------
 $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 $color-bg: #ffffff;
 $color-text: #000000;
@@ -20,14 +17,10 @@ $mobile-bp: 768px;
   height: 100%;
 }
 
-// -------------------------------------------------------------
-// Approach Section Wrapper (150vh)
-// -------------------------------------------------------------
 .approachSection {
   position: relative;
   width: 100vw;
   min-height: 150vh;
-  min-height: 150dvh;
   background-color: $color-bg;
   color: $color-text;
   font-family: $font-sans;
@@ -45,9 +38,6 @@ $mobile-bp: 768px;
   flex-direction: column;
 }
 
-// -------------------------------------------------------------
-// SplitText Masks
-// -------------------------------------------------------------
 .wordMask,
 .lineMask {
   display: inline-flex;
@@ -61,9 +51,6 @@ $mobile-bp: 768px;
   will-change: transform, opacity;
 }
 
-// -------------------------------------------------------------
-// Header
-// -------------------------------------------------------------
 .header {
   margin-bottom: clamp(3.5rem, 7vw, 6.5rem);
 
@@ -78,9 +65,6 @@ $mobile-bp: 768px;
   }
 }
 
-// -------------------------------------------------------------
-// Philosophy Rows Layout
-// -------------------------------------------------------------
 .rowsWrapper {
   display: flex;
   flex-direction: column;
@@ -140,9 +124,6 @@ $mobile-bp: 768px;
   }
 }
 
-// -------------------------------------------------------------
-// Bottom Expanding Clip-Path Image Section
-// -------------------------------------------------------------
 .imageSection {
   position: relative;
   width: 100%;
