@@ -73,6 +73,7 @@ export default function About() {
             const container = aboutRef.current;
             if (!container) return;
 
+            // 1. Ambient Background Parallax Tracks
             if (bgWatermarkRef.current) {
                 gsap.fromTo(
                     bgWatermarkRef.current,
