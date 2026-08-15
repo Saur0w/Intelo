@@ -143,6 +143,8 @@ type LayoutMode = "editorial" | "archive";
 
 export default function Products() {
     const sectionRef = useRef<HTMLElement>(null);
+    const headerRef = useRef<HTMLElement>(null);
+    const bgTextRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
     const leadRef = useRef<HTMLParagraphElement>(null);
@@ -192,6 +194,9 @@ export default function Products() {
                         duration: 0.3,
                         ease: "power2.in",
                     }),
+                onComplete: () => {
+                    ScrollTrigger.refresh();
+                },
             });
         });
     };
@@ -200,7 +205,7 @@ export default function Products() {
         if (mode === layoutMode || !gridRef.current) return;
 
         const targets = gridRef.current.querySelectorAll(
-            `.${styles.productCard}, .${styles.imageContainer}, .${styles.cardImg}`
+            `.${styles.productCard}, .${styles.imageContainer}, .${styles.cardImg}, .${styles.parallaxWrapper}`
         );
         const state = Flip.getState(targets);
 
@@ -209,7 +214,7 @@ export default function Products() {
         requestAnimationFrame(() => {
             if (!gridRef.current) return;
             const updatedTargets = gridRef.current.querySelectorAll(
-                `.${styles.productCard}, .${styles.imageContainer}, .${styles.cardImg}`
+                `.${styles.productCard}, .${styles.imageContainer}, .${styles.cardImg}, .${styles.parallaxWrapper}`
             );
 
             Flip.from(state, {
@@ -235,6 +240,41 @@ export default function Products() {
             CustomEase.create("fashionEase", "0.22, 1, 0.36, 1");
             CustomEase.create("maskEase", "0.77, 0, 0.175, 1");
 
+            // 1. Background Ambient Parallax Text Glide
+            if (bgTextRef.current) {
+                gsap.fromTo(
+                    bgTextRef.current,
+                    { xPercent: 4, yPercent: -6 },
+                    {
+                        xPercent: -14,
+                        yPercent: 6,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: container,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.8,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            // 2. Section Header Floating Parallax
+            if (headerRef.current) {
+                gsap.to(headerRef.current, {
+                    y: -25,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: headerRef.current,
+                        start: "top center",
+                        end: "bottom top",
+                        scrub: 0.6,
+                    },
+                });
+            }
+
+            // 3. Title & Lead SplitText Reveals
             if (titleRef.current) {
                 const splitTitle = new SplitText(titleRef.current, {
                     type: "words,chars",
@@ -282,19 +322,58 @@ export default function Products() {
                 );
             }
 
+            // 4. Product Cards: Image Parallax Scrub + Differential Stagger + Entrance Mask
             const cards = container.querySelectorAll<HTMLElement>(`.${styles.productCard}`);
 
-            cards.forEach((card) => {
+            cards.forEach((card, index) => {
                 const imgContainer = card.querySelector<HTMLElement>(`.${styles.imageContainer}`);
-                const imgInner = card.querySelector<HTMLElement>(`.${styles.cardImg}`);
+                const parallaxWrapper = card.querySelector<HTMLElement>(`.${styles.parallaxWrapper}`);
                 const cardDetails = card.querySelector<HTMLElement>(`.${styles.cardDetails}`);
 
-                if (!imgContainer || !imgInner) return;
+                if (!imgContainer) return;
 
+                // 4a. Smooth Image Parallax Glide inside card frame
+                if (parallaxWrapper) {
+                    gsap.fromTo(
+                        parallaxWrapper,
+                        { yPercent: -12 },
+                        {
+                            yPercent: 12,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: card,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: 0.6,
+                                invalidateOnRefresh: true,
+                            },
+                        }
+                    );
+                }
+
+                // 4b. Differential Multi-plane Card Parallax (Editorial Floating Depth)
+                const yOffset = (index % 2 === 0 ? 1 : -1) * (16 + (index % 3) * 8);
+                gsap.fromTo(
+                    card,
+                    { y: yOffset },
+                    {
+                        y: -yOffset,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0.8,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+
+                // 4c. Entrance Reveal Clip-Path Timeline
                 const cardTl = gsap.timeline({
                     scrollTrigger: {
                         trigger: card,
-                        start: "top 84%",
+                        start: "top 85%",
                         toggleActions: "play none none reverse",
                     },
                 });
@@ -305,19 +384,9 @@ export default function Products() {
                         { clipPath: "inset(100% 0% 0% 0%)" },
                         {
                             clipPath: "inset(0% 0% 0% 0%)",
-                            duration: 1.25,
+                            duration: 1.2,
                             ease: "maskEase",
                         }
-                    )
-                    .fromTo(
-                        imgInner,
-                        { scale: 1.25 },
-                        {
-                            scale: 1,
-                            duration: 1.35,
-                            ease: "fashionEase",
-                        },
-                        0
                     )
                     .fromTo(
                         cardDetails,
@@ -332,13 +401,17 @@ export default function Products() {
                     );
             });
         },
-        { scope: sectionRef }
+        { scope: sectionRef, dependencies: [activeCategory, layoutMode] }
     );
 
     return (
         <section className={styles.productsSection} ref={sectionRef} id="apothecary">
+            <div className={styles.bgParallaxWatermark} ref={bgTextRef} aria-hidden="true">
+                BOTANICAL FORMULATIONS • SANCTUARY DISPENSARY • EST. 1979
+            </div>
+
             <div className={styles.container}>
-                <header className={styles.header}>
+                <header className={styles.header} ref={headerRef}>
                     <div className={styles.topIndexRow}>
                         <span className={styles.sectionIndex}>[ SECTION 04 / DISPENSARY ]</span>
                         <span className={styles.editionTag}>COLLECTION 2026 • BOTANICAL LAB</span>
@@ -411,14 +484,16 @@ export default function Products() {
                         >
                             <div className={styles.cardInner} onClick={() => setSelectedItem(item)}>
                                 <div className={styles.imageContainer}>
-                                    <Image
-                                        src={item.src}
-                                        alt={item.alt}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
-                                        unoptimized
-                                        className={styles.cardImg}
-                                    />
+                                    <div className={styles.parallaxWrapper}>
+                                        <Image
+                                            src={item.src}
+                                            alt={item.alt}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                                            unoptimized
+                                            className={styles.cardImg}
+                                        />
+                                    </div>
 
                                     <div className={styles.imageHeader}>
                                         <span className={styles.itemSku}>{item.sku}</span>

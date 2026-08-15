@@ -37,7 +37,27 @@ $tablet-bp: 1024px;
   overflow: hidden;
 }
 
+.bgParallaxWatermark {
+  position: absolute;
+  top: 15%;
+  left: -15%;
+  width: 220%;
+  font-family: $font-mono;
+  font-size: clamp(4.5rem, 11vw, 10.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(10, 10, 10, 0.022);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  will-change: transform;
+}
+
 .container {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 1560px;
   margin: 0 auto;
@@ -322,6 +342,17 @@ $tablet-bp: 1024px;
     background-color: #eeebe3;
     margin-bottom: 1.1rem;
     will-change: transform, width, height, clip-path;
+
+    .parallaxWrapper {
+      position: absolute;
+      top: -14%;
+      bottom: -14%;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 128%;
+      will-change: transform;
+    }
 
     .cardImg {
       object-fit: cover;
