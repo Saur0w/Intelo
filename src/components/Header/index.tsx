@@ -4,12 +4,19 @@ import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { SplitText } from "gsap/SplitText";
 import styles from "./style.module.scss";
 
 if (typeof window !== "undefined") {
-    gsap.registerPlugin(useGSAP, SplitText);
+    gsap.registerPlugin(useGSAP);
 }
+
+const splitToChars = (text: string) => {
+    return text.split('').map((char, i) => (
+        <span key={i} className={styles.charInner}>
+            {char === ' ' ? '\u00A0' : char}
+        </span>
+    ));
+};
 
 interface NavLink {
     label: string;
@@ -73,6 +80,18 @@ export default function Header({ isLoaded }: HeaderProps) {
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isMenuOpen]);
 
     useGSAP(
         () => {
@@ -146,32 +165,17 @@ export default function Header({ isLoaded }: HeaderProps) {
             const drawer = drawerRef.current;
             if (!drawer) return;
 
-            const linkTexts = drawer.querySelectorAll(`.${styles.mText}`);
+            const chars = drawer.querySelectorAll(`.${styles.charInner}`);
             const linkIndices = drawer.querySelectorAll(`.${styles.mIndexInner}`);
-            const footerTagline = drawer.querySelector(`.${styles.mFooterText}`);
             const footerBtn = drawer.querySelector(`.${styles.mobileReserveBtnInner}`);
-
-            if (linkTexts.length === 0) return;
-
-            const splitLinkTexts = new SplitText(linkTexts, {
-                type: "chars, words",
-                charsClass: styles.charInner,
-            });
-
-            let splitFooter: SplitText | null = null;
-            if (footerTagline) {
-                splitFooter = new SplitText(footerTagline, {
-                    type: "words, chars",
-                    charsClass: styles.charInner,
-                });
-            }
+            const footerChars = drawer.querySelectorAll(`.${styles.mFooterText} .${styles.charInner}`);
 
             if (isMenuOpen) {
-                gsap.set(drawer, { autoAlpha: 1, yPercent: 0 });
-                gsap.set(splitLinkTexts.chars, { yPercent: 120, opacity: 0, rotateZ: 3 });
+                gsap.set(drawer, { autoAlpha: 1 });
+                gsap.set(chars, { yPercent: 120, opacity: 0, rotateZ: 4 });
                 gsap.set(linkIndices, { yPercent: 110, opacity: 0 });
-                if (splitFooter) {
-                    gsap.set(splitFooter.chars, { yPercent: 120, opacity: 0 });
+                if (footerChars.length) {
+                    gsap.set(footerChars, { yPercent: 120, opacity: 0 });
                 }
                 if (footerBtn) {
                     gsap.set(footerBtn, { yPercent: 110, opacity: 0 });
@@ -181,7 +185,12 @@ export default function Header({ isLoaded }: HeaderProps) {
                     defaults: { ease: "power4.out" },
                 });
 
-                tl.to(
+                tl.fromTo(
+                    drawer,
+                    { yPercent: -100, y: 0 },
+                    { yPercent: 0, duration: 0.6 }
+                )
+                .to(
                     linkIndices,
                     {
                         yPercent: 0,
@@ -192,7 +201,7 @@ export default function Header({ isLoaded }: HeaderProps) {
                     0.15
                 )
                     .to(
-                        splitLinkTexts.chars,
+                        chars,
                         {
                             yPercent: 0,
                             opacity: 1,
@@ -203,9 +212,9 @@ export default function Header({ isLoaded }: HeaderProps) {
                         0.18
                     );
 
-                if (splitFooter) {
+                if (footerChars.length) {
                     tl.to(
-                        splitFooter.chars,
+                        footerChars,
                         {
                             yPercent: 0,
                             opacity: 1,
@@ -228,7 +237,7 @@ export default function Header({ isLoaded }: HeaderProps) {
                     );
                 }
             } else {
-                gsap.to(splitLinkTexts.chars, {
+                gsap.to(chars, {
                     yPercent: -100,
                     opacity: 0,
                     duration: 0.3,
@@ -241,8 +250,8 @@ export default function Header({ isLoaded }: HeaderProps) {
                     duration: 0.25,
                     ease: "power3.in",
                 });
-                if (splitFooter) {
-                    gsap.to(splitFooter.chars, {
+                if (footerChars.length) {
+                    gsap.to(footerChars, {
                         yPercent: -100,
                         opacity: 0,
                         duration: 0.25,
@@ -251,6 +260,7 @@ export default function Header({ isLoaded }: HeaderProps) {
                 }
                 gsap.to(drawer, {
                     yPercent: -100,
+                    y: 0,
                     duration: 0.5,
                     delay: 0.2,
                     ease: "power4.inOut",
@@ -259,11 +269,6 @@ export default function Header({ isLoaded }: HeaderProps) {
                     },
                 });
             }
-
-            return () => {
-                splitLinkTexts.revert();
-                if (splitFooter) splitFooter.revert();
-            };
         },
         { scope: headerRef, dependencies: [isMenuOpen] }
     );
@@ -339,7 +344,7 @@ export default function Header({ isLoaded }: HeaderProps) {
                                     <span className={styles.mIndexInner}>0{index + 1}</span>
                                 </span>
                                 <span className={styles.mTextMask}>
-                                    <span className={styles.mText}>{link.label}</span>
+                                    <span className={styles.mText}>{splitToChars(link.label)}</span>
                                 </span>
                             </Link>
                         </div>
@@ -348,7 +353,7 @@ export default function Header({ isLoaded }: HeaderProps) {
 
                 <div className={styles.mobileFooter}>
                     <div className={styles.mFooterTextMask}>
-                        <p className={styles.mFooterText}>THE ARCHITECTURE OF WELL-BEING</p>
+                        <p className={styles.mFooterText}>{splitToChars("THE ARCHITECTURE OF WELL-BEING")}</p>
                     </div>
                     <div className={styles.mobileReserveBtnMask}>
                         <Link
