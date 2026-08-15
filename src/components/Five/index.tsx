@@ -1,232 +1,373 @@
 "use client";
 
-import styles from "./style.module.scss";
+import React, { useRef, useState, useCallback } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useRef, useState } from "react";
-import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
+import { SplitText } from "gsap/SplitText";
+import styles from "./style.module.scss";
 
-gsap.registerPlugin(SplitText, useGSAP, ScrollTrigger);
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
+}
 
-interface PillarItem {
+export interface PillarItem {
+    id: string;
+    num: string;
+    tag: string;
     title: string;
+    subtitle: string;
     description: string;
     src: string;
     alt: string;
-    icon: string;
+    iconSvg: React.ReactNode;
 }
 
 const pillars: PillarItem[] = [
     {
+        id: "spa-beauty",
+        num: "01",
+        tag: "[ RESTORATION & TOUCH ]",
         title: "SPA & BEAUTY",
+        subtitle: "Cellular Healing & Hydrotherapy",
         description:
-            "Promote relaxation and energy with healing bodywork and therapeutic treatments.",
+            "Promote profound relaxation and cellular vitality through healing therapeutic bodywork, bespoke skin ritual therapies, and restorative mineral wraps.",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazn8qd42fvh07k4t60fwcdy",
         alt: "Woman meditating in nature",
-        icon: "/icons/1.svg",
+        iconSvg: (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M12 3a9 9 0 0 0-9 9c0 4.97 4.03 9 9 9s9-4.03 9-9a9 9 0 0 0-9-9z" />
+                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z" />
+                <path d="M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+            </svg>
+        ),
     },
     {
+        id: "health-performance",
+        num: "02",
+        tag: "[ DIAGNOSTICS & MEDICINE ]",
         title: "HEALTH & PERFORMANCE",
+        subtitle: "Integrative Longevity Protocols",
         description:
-            "Go beyond symptoms with personalized plans for prevention from physicians and experts.",
+            "Go far beyond immediate symptoms with diagnostic precision, clinical wellness scans, and personalized preventive longevity plans formulated by leading physicians.",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazn4fai2fjp06k3apajmrnr",
         alt: "Doctor discussing health results",
-        icon: "/icons/2.svg",
+        iconSvg: (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 7.65l.77.78L12 20.66l7.65-7.65.77-.78a5.4 5.4 0 0 0 0-7.65z" />
+                <path d="M3.5 12h4l2-4 3 8 2-4h6" />
+            </svg>
+        ),
     },
     {
+        id: "fitness-movement",
+        num: "03",
+        tag: "[ KINETIC VITALITY ]",
         title: "FITNESS & MOVEMENT",
+        subtitle: "Functional Biometrics & Joyful Motion",
         description:
-            "Enhance everyday mobility and athletic performance, guided by exercise experts.",
+            "Enhance everyday functional mobility, core strength, and athletic longevity across guided mountain hikes, court athletics, and personalized biometric coaching.",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazn2bg52ah507k3kkmhfq2d",
         alt: "Fitness stretching exercises",
-        icon: "/icons/3.svg",
+        iconSvg: (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="5" r="2" />
+                <path d="m9 20 3-6 3 6" />
+                <path d="m6 8 6 2 6-2" />
+                <path d="M12 10v4" />
+            </svg>
+        ),
     },
     {
+        id: "mind-spirit",
+        num: "04",
+        tag: "[ EQUILIBRIUM & PURPOSE ]",
         title: "MIND & SPIRIT",
+        subtitle: "Resonance Baths & Contemplation",
         description:
-            "Pursue balance and purpose with behavioral therapy, coaching, and spiritual guidance.",
+            "Pursue emotional clarity and purposeful living through sound resonance baths, meditation sanctuaries, behavioral coaching, and ancient spiritual rituals.",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazn5zwr2gw106k3z817jg30",
         alt: "Sound bath meditation session",
-        icon: "/icons/4.svg",
+        iconSvg: (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" />
+                <path d="M12 6a6 6 0 0 0-6 6c0 3.31 2.69 6 6 6s6-2.69 6-6a6 6 0 0 0-6-6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z" />
+            </svg>
+        ),
     },
     {
+        id: "nutrition-food",
+        num: "05",
+        tag: "[ CULINARY MEDICINE ]",
         title: "NUTRITION & FOOD",
+        subtitle: "Soil-to-Table Metabolic Nourishment",
         description:
-            "Pinpoint strategies for optimal weight and holistic health informed by nutritionists and chefs.",
+            "Pinpoint sustainable strategies for metabolic health and anti-inflammatory vitality informed by executive chefs and integrative nutritionists using organic ingredients.",
         src: "https://us-east-1-shared-usea1-02.graphassets.com/AbltN5ThcTDi6XXh1GSBTz/quality=value:60/cmazn0ns1280i07k4ymirg63s",
         alt: "Healthy nutritious food bowl",
-        icon: "/icons/5.svg",
+        iconSvg: (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M12 2L4 9l2 11h12l2-11-8-7z" />
+                <path d="M12 7v10" />
+                <path d="M9 12h6" />
+            </svg>
+        ),
     },
 ];
 
-export default function Five() {
-    const fiveRef = useRef<HTMLDivElement>(null);
-    const mainTitleRef = useRef<HTMLHeadingElement>(null);
-    const mainSubtextRef = useRef<HTMLParagraphElement>(null);
-    const imageWrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const zIndexCounter = useRef<number>(10);
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+export default function Pillars() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const mediaContainerRef = useRef<HTMLDivElement>(null);
+    const manifestoRef = useRef<HTMLParagraphElement>(null);
+    const sectionTitleRef = useRef<HTMLHeadingElement>(null);
 
-    const handlePillarSelect = (index: number) => {
-        if (index === activeIndex) return;
+    const [activeIndex, setActiveIndex] = useState(0);
+    const isAnimatingRef = useRef(false);
 
-        const targetWrapper = imageWrapperRefs.current[index];
-        if (!targetWrapper) return;
+    const transitionPillar = useCallback((nextIdx: number) => {
+        if (nextIdx === activeIndex || isAnimatingRef.current) return;
+        const container = mediaContainerRef.current;
+        if (!container) return;
 
-        setActiveIndex(index);
-        zIndexCounter.current += 1;
+        isAnimatingRef.current = true;
+        const allSlides = container.querySelectorAll<HTMLElement>(`.${styles.mediaSlide}`);
+        const currentSlide = allSlides[activeIndex];
+        const incomingSlide = allSlides[nextIdx];
 
-        gsap.set(targetWrapper, { zIndex: zIndexCounter.current });
-        gsap.fromTo(
-            targetWrapper,
-            { clipPath: "inset(100% 0% 0% 0%)" },
+        if (!currentSlide || !incomingSlide) {
+            isAnimatingRef.current = false;
+            return;
+        }
+
+        const incomingImg = incomingSlide.querySelector(`.${styles.slideImg}`);
+        const currentImg = currentSlide.querySelector(`.${styles.slideImg}`);
+
+        setActiveIndex(nextIdx);
+
+        gsap.set(incomingSlide, {
+            zIndex: 4,
+            clipPath: "inset(100% 0% 0% 0%)",
+            autoAlpha: 1,
+        });
+        gsap.set(currentSlide, { zIndex: 2 });
+        gsap.set(incomingImg, { scale: 1.18 });
+
+        const tl = gsap.timeline({
+            defaults: { ease: "power4.inOut" },
+            onComplete: () => {
+                gsap.set(currentSlide, { zIndex: 1, autoAlpha: 0 });
+                gsap.set(incomingSlide, { zIndex: 3 });
+                isAnimatingRef.current = false;
+            },
+        });
+
+        tl.to(
+            incomingSlide,
             {
                 clipPath: "inset(0% 0% 0% 0%)",
-                duration: 0.8,
-                ease: "power3.inOut",
-            }
-        );
-    };
+                duration: 1.1,
+            },
+            0
+        )
+            .to(
+                incomingImg,
+                {
+                    scale: 1,
+                    duration: 1.25,
+                    ease: "power3.out",
+                },
+                0
+            )
+            .to(
+                currentImg,
+                {
+                    scale: 0.95,
+                    duration: 1.1,
+                },
+                0
+            );
+    }, [activeIndex]);
 
     useGSAP(
         () => {
-            if (!mainTitleRef.current) return;
+            const section = sectionRef.current;
+            if (!section) return;
 
-            const splitHeader = new SplitText(mainTitleRef.current, {
-                type: "words",
-            });
+            if (manifestoRef.current) {
+                const splitManifesto = new SplitText(manifestoRef.current, {
+                    type: "lines,words",
+                    linesClass: styles.lineMask,
+                    wordsClass: styles.wordMask,
+                });
 
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: fiveRef.current,
-                    start: "top 80%",
-                    toggleActions: "play none none none",
-                },
-            });
-
-            tl.fromTo(
-                splitHeader.words,
-                { opacity: 0, y: 25 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.6,
-                    stagger: 0.03,
-                    ease: "power2.out",
-                    clearProps: "transform,opacity",
-                }
-            )
-                .fromTo(
-                    mainSubtextRef.current,
-                    { opacity: 0, y: 15 },
+                gsap.fromTo(
+                    splitManifesto.words,
+                    { yPercent: 115, opacity: 0 },
                     {
+                        yPercent: 0,
                         opacity: 1,
-                        y: 0,
-                        duration: 0.6,
-                        ease: "power2.out",
-                        clearProps: "transform,opacity",
-                    },
-                    "-=0.3"
-                )
-                .fromTo(
-                    imageWrapperRefs.current[0],
-                    { clipPath: "inset(100% 0% 0% 0%)" },
-                    {
-                        clipPath: "inset(0% 0% 0% 0%)",
-                        duration: 1,
-                        ease: "power3.inOut",
-                    },
-                    "-=0.4"
-                )
-                .fromTo(
-                    `.${styles.pillarItem}`,
-                    { opacity: 0, x: 20 },
-                    {
-                        opacity: 1,
-                        x: 0,
-                        stagger: 0.08,
-                        duration: 0.6,
-                        ease: "power2.out",
-                        clearProps: "transform,opacity",
-                    },
-                    "-=0.6"
+                        duration: 0.95,
+                        stagger: 0.015,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: manifestoRef.current,
+                            start: "top 85%",
+                        },
+                    }
                 );
+            }
 
-            return () => {
-                splitHeader.revert();
-            };
+            if (sectionTitleRef.current) {
+                const splitTitle = new SplitText(sectionTitleRef.current, {
+                    type: "words,chars",
+                    charsClass: styles.charInner,
+                    wordsClass: styles.wordMask,
+                });
+
+                gsap.fromTo(
+                    splitTitle.chars,
+                    { yPercent: 120, opacity: 0, rotateZ: 3 },
+                    {
+                        yPercent: 0,
+                        opacity: 1,
+                        rotateZ: 0,
+                        duration: 1.05,
+                        stagger: 0.012,
+                        ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: sectionTitleRef.current,
+                            start: "top 82%",
+                        },
+                    }
+                );
+            }
+
+            const pillarCards = section.querySelectorAll<HTMLElement>(`.${styles.pillarItem}`);
+            pillarCards.forEach((card, index) => {
+                ScrollTrigger.create({
+                    trigger: card,
+                    start: "top 55%",
+                    end: "bottom 55%",
+                    onEnter: () => transitionPillar(index),
+                    onEnterBack: () => transitionPillar(index),
+                });
+            });
+
+            const allSlides = section.querySelectorAll<HTMLElement>(`.${styles.mediaSlide}`);
+            allSlides.forEach((slide, idx) => {
+                if (idx === 0) {
+                    gsap.set(slide, { zIndex: 3, autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
+                } else {
+                    gsap.set(slide, { zIndex: 1, autoAlpha: 0, clipPath: "inset(100% 0% 0% 0%)" });
+                }
+            });
         },
-        { scope: fiveRef }
+        { scope: sectionRef }
     );
 
     return (
-        <section className={styles.five} ref={fiveRef}>
-            <div className={styles.headerGroup}>
-                <h2 className={styles.mainTitle} ref={mainTitleRef}>
-                    A TRAILBLAZER IN INTEGRATIVE WELLNESS
-                </h2>
-                <p className={styles.mainSubtext} ref={mainSubtextRef}>
-                    Wellness is personal. At Canyon Ranch, we celebrate that no two paths
-                    are the same by offering a breadth of experiences for every kind of
-                    journey – inspired by our five pillars.
-                </p>
-            </div>
+        <section className={styles.pillarsSection} ref={sectionRef} id="methodology">
+            <div className={styles.container}>
+                <header className={styles.topHeader}>
+                    <div className={styles.eyebrowTag}>
+                        <span className={styles.pulseDot} />
+                        <span>A TRAILBLAZER IN INTEGRATIVE WELLNESS</span>
+                    </div>
 
-            <div className={styles.gridContainer}>
-                <div className={styles.imageStack}>
-                    {pillars.map((item, index) => (
-                        <div
-                            key={index}
-                            ref={(el) => {
-                                imageWrapperRefs.current[index] = el;
-                            }}
-                            className={`${styles.imageWrapper} ${
-                                index === 0 ? styles.initialVisible : ""
-                            }`}
-                        >
-                            <Image
-                                src={item.src}
-                                alt={item.alt}
-                                fill
-                                sizes="(max-width: 992px) 100vw, 50vw"
-                                priority={index === 0}
-                                className={styles.image}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                <div className={styles.pillarsList}>
-                    <p className={styles.pillarsSubhead}>
-                        Five Wellness Pillars. One You.
+                    <p ref={manifestoRef} className={styles.manifestoLead}>
+                        Wellness is personal. At Canyon Ranch, we celebrate that no two paths are the same by offering a breadth of immersive experiences for every kind of journey—inspired by our five foundational pillars.
                     </p>
+                </header>
 
-                    {pillars.map((pillar, index) => (
-                        <div
-                            key={index}
-                            className={`${styles.pillarItem} ${
-                                activeIndex === index ? styles.active : ""
-                            }`}
-                            onMouseEnter={() => handlePillarSelect(index)}
-                            onClick={() => handlePillarSelect(index)}
-                        >
-                            <div className={styles.pillarIcon}>
-                                <Image
-                                    src={pillar.icon}
-                                    alt={`${pillar.title} icon`}
-                                    width={22}
-                                    height={22}
-                                />
-                            </div>
-                            <div className={styles.pillarContent}>
-                                <h3 className={styles.pillarTitle}>{pillar.title}</h3>
-                                <p className={styles.pillarDesc}>{pillar.description}</p>
-                            </div>
+                <div className={styles.mainLayout}>
+                    <div className={styles.stickyCanvasColumn}>
+                        <div className={styles.mediaFrame} ref={mediaContainerRef}>
+                            {pillars.map((pillar, idx) => (
+                                <div
+                                    key={pillar.id}
+                                    className={`${styles.mediaSlide} ${idx === activeIndex ? styles.slideActive : ""}`}
+                                >
+                                    <div className={styles.slideImgWrapper}>
+                                        <Image
+                                            src={pillar.src}
+                                            alt={pillar.alt}
+                                            fill
+                                            sizes="(max-width: 1024px) 100vw, 50vw"
+                                            unoptimized
+                                            priority={idx === 0}
+                                            className={styles.slideImg}
+                                        />
+                                        <div className={styles.mediaOverlay} />
+                                    </div>
+
+                                    <div className={styles.imageHeaderBadge}>
+                                        <span className={styles.badgeNum}>[ {pillar.num} / 05 ]</span>
+                                        <span className={styles.badgeTag}>{pillar.tag}</span>
+                                    </div>
+
+                                    <div className={styles.imageFooterBadge}>
+                                        <span className={styles.badgeSubtitle}>{pillar.subtitle}</span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+
+                    <div className={styles.contentColumn}>
+                        <div className={styles.columnHeader}>
+                            <span className={styles.subTag}>[ THE ARCHITECTURE OF VITALITY ]</span>
+                            <h2 ref={sectionTitleRef} className={styles.sectionHeading}>
+                                Five Wellness Pillars. One You.
+                            </h2>
+                        </div>
+
+                        <div className={styles.pillarsList}>
+                            {pillars.map((pillar, index) => {
+                                const isActive = index === activeIndex;
+                                return (
+                                    <article
+                                        key={pillar.id}
+                                        className={`${styles.pillarItem} ${isActive ? styles.itemActive : ""}`}
+                                        onClick={() => transitionPillar(index)}
+                                    >
+                                        <div className={styles.itemTopRow}>
+                                            <div className={styles.iconBox}>{pillar.iconSvg}</div>
+                                            <div className={styles.titleMeta}>
+                                                <div className={styles.titleFlex}>
+                                                    <span className={styles.pillarNumber}>{pillar.num}</span>
+                                                    <h3 className={styles.pillarTitle}>{pillar.title}</h3>
+                                                </div>
+                                                <span className={styles.pillarSubtitle}>{pillar.subtitle}</span>
+                                            </div>
+                                        </div>
+
+                                        <p className={styles.pillarDesc}>{pillar.description}</p>
+
+                                        <div className={styles.progressTrack}>
+                                            <div className={styles.progressBar} />
+                                        </div>
+                                    </article>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
+
+                <footer className={styles.sectionFooter}>
+                    <div className={styles.footerBorder} />
+                    <div className={styles.footerRow}>
+                        <div className={styles.guaranteeMeta}>
+                            <span className={styles.guaranteeDot} />
+                            <span>CUSTOMIZED INTEGRATIVE BLUEPRINT FOR EVERY GUEST</span>
+                        </div>
+                        <Link href="/" className={styles.exploreLink}>
+                            <span>EXPLORE SANCTUARY HAVENS</span>
+                            <span className={styles.arrow}>→</span>
+                        </Link>
+                    </div>
+                </footer>
             </div>
         </section>
     );

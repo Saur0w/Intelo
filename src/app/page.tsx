@@ -7,12 +7,12 @@ import Preloader from "@/components/Preloader";
 import { useState } from "react";
 import Header from "@/components/Header";
 import About from "@/components/About";
-import Des from "@/components/Des";
 import Brands from "@/components/Brands";
 import Footer from "@/components/Footer";
 import Products from "@/components/Products";
 import Methodology from "@/components/Methodology";
 import Study from "@/components/Study";
+import Five from "@/components/Five";
 
 export default function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -21,9 +21,9 @@ export default function Home() {
         {!isLoaded && <Preloader onComplete={() => setIsLoaded(true)} />}
         <Header isLoaded={isLoaded} />
         <Landing isLoaded={isLoaded} />
-        <Des />
         <About />
         <Study />
+        <Five />
         <Products />
         <Brands />
         <Methodology />

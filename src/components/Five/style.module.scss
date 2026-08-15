@@ -1,146 +1,409 @@
-@mixin flex-center($direction: row, $justify: center, $align: center) {
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-mono: 'JetBrains Mono', monospace;
+
+$bg-color: #f7f7f7;
+$card-surface: #ffffff;
+$text-primary: #171615;
+$text-muted: #79746e;
+$gold-accent: #c4a482;
+$border-subtle: rgba(23, 22, 21, 0.08);
+
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+
+@mixin flex-between {
   display: flex;
-  flex-direction: $direction;
-  justify-content: $justify;
-  align-items: $align;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.five {
-  min-height: 100vh;
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pillarsSection {
+  position: relative;
   width: 100vw;
-  background-color: #faf8f5;
-  padding: 6rem 3rem;
-  box-sizing: border-box;
-  font-family: serif;
-  color: #3b322c;
-  @include flex-center(column, center, center);
+  background-color: $bg-color;
+  color: $text-primary;
+  font-family: $font-sans;
+  padding: clamp(5rem, 9vw, 9.5rem) 0;
+  border-top: 1px solid $border-subtle;
+  overflow: hidden;
 }
 
-.headerGroup {
-  text-align: center;
-  max-width: 800px;
-  margin-bottom: 4rem;
+.container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4.5vw, 4.5rem);
+}
 
-  .mainTitle {
-    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
-    letter-spacing: 0.25em;
-    color: #4a3f35;
-    font-weight: 400;
+.lineMask,
+.wordMask {
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.12em;
+}
+
+.charInner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.topHeader {
+  max-width: 64ch;
+  margin: 0 auto clamp(4.5rem, 8vw, 7.5rem) auto;
+  text-align: center;
+
+  .eyebrowTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: $font-mono;
+    font-size: clamp(0.68rem, 1vw, 0.78rem);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    margin-bottom: 1.25rem;
+    color: $text-muted;
+    margin-bottom: 1.5rem;
+
+    .pulseDot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: $gold-accent;
+    }
   }
 
-  .mainSubtext {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: #6e645a;
-    font-style: italic;
+  .manifestoLead {
+    font-size: clamp(1.2rem, 2.3vw, 1.95rem);
+    font-weight: 300;
+    line-height: 1.45;
+    letter-spacing: -0.025em;
+    color: $text-primary;
     margin: 0;
   }
 }
 
-.gridContainer {
+.mainLayout {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 4rem;
-  max-width: 1600px;
-  width: 100%;
-  align-items: center;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(3rem, 6vw, 6.5rem);
+  align-items: start;
 
-  @media (max-width: 992px) {
+  @media (max-width: $tablet-bp) {
     grid-template-columns: 1fr;
-    gap: 3rem;
   }
 }
 
-.imageStack {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background-color: #ede7e0;
 
-  @media (max-width: 992px) {
-    aspect-ratio: 16 / 10;
+.stickyCanvasColumn {
+  position: sticky;
+  top: 5rem;
+  height: calc(100dvh - 9rem);
+  min-height: 520px;
+  max-height: 820px;
+
+  @media (max-width: $tablet-bp) {
+    position: relative;
+    top: 0;
+    height: 60vh;
+    min-height: 420px;
+    margin-bottom: 3.5rem;
+  }
+
+  .mediaFrame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #e5dfd3;
+    border: none;
+
+    .mediaSlide {
+      @include absolute-fill;
+      overflow: hidden;
+      will-change: clip-path;
+
+      .slideImgWrapper {
+        @include absolute-fill;
+
+        .slideImg {
+          object-fit: cover;
+          object-position: center;
+          will-change: transform;
+          user-select: none;
+        }
+
+        .mediaOverlay {
+          @include absolute-fill;
+          background: linear-gradient(
+                  to top,
+                  rgba(0, 0, 0, 0.45) 0%,
+                  transparent 50%
+          );
+        }
+      }
+
+      .imageHeaderBadge {
+        @include flex-between;
+        position: absolute;
+        top: 1.25rem;
+        left: 1.25rem;
+        right: 1.25rem;
+        z-index: 5;
+        font-family: $font-mono;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffffff;
+
+        .badgeNum {
+          padding: 0.35rem 0.65rem;
+          background: rgba(0, 0, 0, 0.45);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border-radius: 9999px;
+        }
+
+        .badgeTag {
+          opacity: 0.85;
+        }
+      }
+
+      .imageFooterBadge {
+        position: absolute;
+        bottom: 1.25rem;
+        left: 1.25rem;
+        z-index: 5;
+        font-family: $font-mono;
+        font-size: 0.74rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
   }
 }
 
-.imageWrapper {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  clip-path: inset(100% 0% 0% 0%);
-  will-change: clip-path;
+.contentColumn {
+  display: flex;
+  flex-direction: column;
 
-  &.initialVisible {
-    clip-path: inset(0% 0% 0% 0%);
-    z-index: 1;
-  }
+  .columnHeader {
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
 
-  .image {
-    object-fit: cover;
+    .subTag {
+      display: block;
+      font-family: $font-mono;
+      font-size: clamp(0.68rem, 1vw, 0.76rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $text-muted;
+      margin-bottom: 1rem;
+    }
+
+    .sectionHeading {
+      font-size: clamp(2.2rem, 4.5vw, 3.75rem);
+      font-weight: 350;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      color: $text-primary;
+      margin: 0;
+    }
   }
 }
 
 .pillarsList {
   display: flex;
   flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 2.25rem);
 
-  .pillarsSubhead {
-    font-family: serif;
-    font-size: 1.1rem;
-    color: #4a3f35;
-    margin-bottom: 2rem;
-    font-style: italic;
+  .pillarItem {
+    position: relative;
+    padding: clamp(1.4rem, 2.5vw, 2rem);
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    .itemTopRow {
+      display: flex;
+      align-items: center;
+      gap: 1.15rem;
+      margin-bottom: 0.85rem;
+
+      .iconBox {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(23, 22, 21, 0.05);
+        color: $text-muted;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.35s ease;
+      }
+
+      .titleMeta {
+        display: flex;
+        flex-direction: column;
+
+        .titleFlex {
+          display: flex;
+          align-items: baseline;
+          gap: 0.65rem;
+
+          .pillarNumber {
+            font-family: $font-mono;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: $gold-accent;
+          }
+
+          .pillarTitle {
+            font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+            font-weight: 500;
+            letter-spacing: -0.015em;
+            text-transform: uppercase;
+            color: $text-primary;
+            margin: 0;
+          }
+        }
+
+        .pillarSubtitle {
+          font-family: $font-mono;
+          font-size: 0.72rem;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: $text-muted;
+          margin-top: 0.2rem;
+        }
+      }
+    }
+
+    .pillarDesc {
+      font-size: clamp(0.9rem, 1.2vw, 1.02rem);
+      font-weight: 400;
+      line-height: 1.65;
+      color: $text-muted;
+      margin: 0 0 1.25rem 0;
+      max-width: 48ch;
+      transition: color 0.35s ease;
+    }
+
+    .progressTrack {
+      position: relative;
+      width: 100%;
+      height: 1.5px;
+      background-color: $border-subtle;
+      overflow: hidden;
+
+      .progressBar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $text-primary;
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.45);
+
+      .itemTopRow .iconBox {
+        background: rgba(23, 22, 21, 0.09);
+        color: $text-primary;
+      }
+    }
+
+    &.itemActive {
+      background: $card-surface;
+      border-color: $border-subtle;
+      box-shadow: 0 6px 20px rgba(23, 22, 21, 0.04);
+
+      .itemTopRow .iconBox {
+        background: $text-primary;
+        color: #ffffff;
+        transform: scale(1.05);
+      }
+
+      .pillarDesc {
+        color: $text-primary;
+      }
+
+      .progressTrack .progressBar {
+        transform: scaleX(1);
+      }
+    }
   }
 }
 
-.pillarItem {
-  display: flex;
-  gap: 1.25rem;
-  padding: 1.2rem 0;
-  border-bottom: 1px solid #eae3db;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.sectionFooter {
+  margin-top: clamp(4.5rem, 8vw, 7.5rem);
 
-  &:last-child {
-    border-bottom: none;
+  .footerBorder {
+    width: 100%;
+    height: 1px;
+    background-color: $border-subtle;
+    margin-bottom: 1.75rem;
   }
 
-  .pillarIcon {
-    color: #a04825;
-    margin-top: 0.2rem;
-    transition: transform 0.3s ease;
-  }
-
-  .pillarTitle {
-    font-family: serif;
-    font-size: 1rem;
-    letter-spacing: 0.15em;
-    color: #3b322c;
-    font-weight: 400;
+  .footerRow {
+    @include flex-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-family: $font-mono;
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin: 0 0 0.4rem 0;
-    transition: color 0.3s ease;
-  }
 
-  .pillarDesc {
-    font-family: serif;
-    font-size: 0.88rem;
-    line-height: 1.55;
-    color: #7a6e63;
-    margin: 0;
-  }
+    .guaranteeMeta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: $text-muted;
 
-  &:hover,
-  &.active {
-    .pillarIcon {
-      transform: translateX(3px);
+      .guaranteeDot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: $gold-accent;
+      }
     }
 
-    .pillarTitle {
-      color: #a04825;
+    .exploreLink {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $text-primary;
+      text-decoration: none;
+      transition: opacity 0.25s ease;
+
+      .arrow {
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        opacity: 0.65;
+        .arrow {
+          transform: translateX(4px);
+        }
+      }
     }
   }
 }
